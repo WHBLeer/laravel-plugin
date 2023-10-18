@@ -183,7 +183,17 @@ class Plugin
     {
         return $this->get('description');
     }
-
+    
+    /**
+     * Get logo.
+     *
+     * @return string
+     */
+    public function getLogo(): string
+    {
+        return $this->get('logo');
+    }
+    
     /**
      * Get alias.
      *
