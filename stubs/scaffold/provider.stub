@@ -102,7 +102,7 @@ class $CLASS$ extends ServiceProvider
 
 		$targetPath = plugin_path($this->pluginName, '$PATH_ASSETS$');
 
-		if (!file_exists($linkPath) || $this->isRemovableSymlink($linkPath, false)) {
+		if (!file_exists($linkPath) || !is_link($linkPath)) {
 			if (is_link($linkPath)) {
 				$this->app->make('files')->delete($linkPath);
 			}
@@ -145,9 +145,4 @@ class $CLASS$ extends ServiceProvider
         return $paths;
     }
 
-
-	private function isRemovableSymlink(string $link, bool $force): bool
-	{
-		return is_link($link) && $force;
-	}
 }
