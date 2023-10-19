@@ -23,6 +23,7 @@ return [
 			'scaffold/helper' => 'Support/helper.php',
 			'assets/js/app'   => 'Resources/assets/js/app.js',
 			'assets/sass/app' => 'Resources/assets/sass/app.scss',
+			'assets/logo'     => 'Resources/assets/logo.png',
 			'readme'          => 'readme.md',
 			'webpack'         => 'webpack.mix.js',
 			'package'         => 'package.json',

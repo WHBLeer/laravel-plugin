@@ -2,7 +2,7 @@
     "name": "$STUDLY_NAME$",
     "alias": "$LOWER_NAME$",
     "description": "",
-    "logo": "",
+    "logo": "logo.png",
     "version": "1.0.0",
     "keywords": ["UhaveShop插件","$STUDLY_NAME$"],
     "author": {
