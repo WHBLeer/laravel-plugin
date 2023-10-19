@@ -2,7 +2,9 @@
 
 namespace $NAMESPACE$;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use Plugins\$PLUGIN$\Support\StorageManager;
 
 class $CLASS$ extends ServiceProvider
 {
@@ -26,6 +28,8 @@ class $CLASS$ extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
+	    $this->registerLink();
+	    $this->registerHelper();
     }
 
     /**
@@ -87,6 +91,39 @@ class $CLASS$ extends ServiceProvider
         }
     }
 
+	/**
+	 * Register link.
+	 *
+     * @return void
+	 */
+	public function registerLink()
+	{
+		$linkPath = public_path('assets/plugin/' . $this->pluginNameLower);
+
+		$targetPath = plugin_path($this->pluginName, '$PATH_ASSETS$');
+
+		if (!file_exists($linkPath) || $this->isRemovableSymlink($linkPath, false)) {
+			if (is_link($linkPath)) {
+				$this->app->make('files')->delete($linkPath);
+			}
+			$this->app->make('files')->link($targetPath, $linkPath);
+		}
+	}
+
+	/**
+	 * Register helper.
+	 *
+     * @return void
+	 */
+	public function registerHelper()
+	{
+		$helperPath = plugin_path($this->pluginName, '$HELPER_PATH$');
+
+		if (file_exists($helperPath)) {
+			require_once $helperPath;
+		}
+	}
+
     /**
      * Get the services provided by the provider.
      *
@@ -107,4 +144,10 @@ class $CLASS$ extends ServiceProvider
         }
         return $paths;
     }
+
+
+	private function isRemovableSymlink(string $link, bool $force): bool
+	{
+		return is_link($link) && $force;
+	}
 }

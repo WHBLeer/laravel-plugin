@@ -4,7 +4,12 @@
     "description": "",
     "logo": "",
     "version": "1.0.0",
-    "keywords": [],
+    "keywords": ["UhaveShop插件","$STUDLY_NAME$"],
+    "author": {
+        "name": "your name",
+        "email": "your email",
+        "home": "https://www.your_home.com"
+    },
     "priority": 0,
     "providers": [
         "$PLUGIN_NAMESPACE$\\$STUDLY_NAME$\\$PROVIDER_NAMESPACE$\\$STUDLY_NAME$ServiceProvider"
