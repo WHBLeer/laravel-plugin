@@ -117,7 +117,7 @@ class $CLASS$ extends ServiceProvider
 	 */
 	public function registerHelper()
 	{
-		$helperPath = plugin_path($this->pluginName, '$HELPER_PATH$');
+		$helperPath = plugin_path($this->pluginName, '$PATH_SUPPORT$/helper.php');
 
 		if (file_exists($helperPath)) {
 			require_once $helperPath;
