@@ -33,6 +33,7 @@ return [
 			'routes/web'      => ['LOWER_NAME', 'STUDLY_NAME'],
 			'routes/api'      => ['LOWER_NAME'],
 			'json'            => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'PROVIDER_NAMESPACE'],
+			'readme'          => ['LOWER_NAME', 'STUDLY_NAME'],
 			'views/index'     => ['LOWER_NAME'],
 			'views/master'    => ['LOWER_NAME', 'STUDLY_NAME'],
 			'scaffold/config' => ['STUDLY_NAME'],

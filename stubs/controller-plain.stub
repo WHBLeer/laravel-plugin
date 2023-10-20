@@ -2,7 +2,7 @@
 
 namespace $CLASS_NAMESPACE$;
 
-use Illuminate\Routing\Controller;
+use Sanlilin\LaravelPlugin\Support\Controller;
 
 class $CLASS$ extends Controller
 {
