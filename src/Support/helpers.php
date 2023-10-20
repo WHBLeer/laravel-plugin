@@ -8,3 +8,12 @@ if (! function_exists('plugin_path')) {
         return $plugin->getPath().($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 }
+
+if (! function_exists('plugin_enabled')) {
+	function plugin_enabled(string $name): string
+	{
+		$plugin = app('plugins.repository')->find($name);
+
+		return $plugin && $plugin->isEnabled();
+	}
+}
