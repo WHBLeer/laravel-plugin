@@ -2,6 +2,7 @@
 
 namespace $NAMESPACE$;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Plugins\$PLUGIN$\Support\StorageManager;
@@ -30,6 +31,7 @@ class $CLASS$ extends ServiceProvider
         $this->registerViews();
 	    $this->registerLink();
 	    $this->registerHelper();
+	    $this->registerBlade();
     }
 
     /**
@@ -122,6 +124,19 @@ class $CLASS$ extends ServiceProvider
 		if (file_exists($helperPath)) {
 			require_once $helperPath;
 		}
+	}
+
+	/**
+	 * Register blade.
+	 *
+     * @return void
+	 */
+	public function registerBlade()
+	{
+		Blade::if('$LOWER_NAME$', function () {
+			$plugin = app('plugins.repository')->findOrFail('$PLUGIN$');
+			return $plugin && $plugin->isEnabled();
+		});
 	}
 
     /**
