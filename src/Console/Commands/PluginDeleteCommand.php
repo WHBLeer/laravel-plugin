@@ -24,9 +24,15 @@ class PluginDeleteCommand extends Command
                 $this->getPlugin()->getAllComposerRequires()
             )->run();
 
-            $this->laravel['plugins.repository']->delete($this->argument('plugin'));
+	        // 删除插件创建的资源软链
+	        $linkPath = public_path('assets/plugin/'.$this->getPlugin()->getLowerName());
+	        if (file_exists($linkPath) || is_link($linkPath)) {
+		        $this->laravel->make('files')->delete($linkPath);
+	        }
+	        // 删除插件注册
+	        $this->laravel['plugins.repository']->delete($this->argument('plugin'));
 
-            $this->info("Plugin {$this->argument('plugin')} has been deleted.");
+	        $this->info("Plugin {$this->argument('plugin')} has been deleted.");
 
             return 0;
         } catch (Exception $exception) {
