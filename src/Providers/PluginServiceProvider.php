@@ -2,6 +2,7 @@
 
 namespace Sanlilin\LaravelPlugin\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Sanlilin\LaravelPlugin\Contracts\ActivatorInterface;
 use Sanlilin\LaravelPlugin\Contracts\ClientInterface;
@@ -31,6 +32,7 @@ class PluginServiceProvider extends ServiceProvider
         $this->registerServices();
         $this->setupStubPath();
         $this->registerProviders();
+		$this->registerBlade();
     }
 
     /**
@@ -107,6 +109,20 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->register(ContractsServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
     }
+
+	/**
+	 * Register blade.
+	 *
+	 * @return void
+	 */
+	public function registerBlade()
+	{
+		Blade::if('plugin', function ($expression) {
+			$plugin = $this->app['plugins.repository']->findOrFail($expression);
+			return $plugin && $plugin->isEnabled();
+		});
+
+	}
 
     /**
      * Get the services provided by the provider.

@@ -19,6 +19,23 @@ class Controller extends BaseController
 	}
 
 	/**
+	 * 自定义信息返回
+	 * @param     $message
+	 * @param int $code
+	 * @return JsonResponse
+	 *
+	 * @author: hongbinwang
+	 * @time  : 2023/8/21 17:41
+	 */
+	public function json($message, int $code=0): JsonResponse
+	{
+		return response()->json([
+			'code' => $code,
+			'message' => $message,
+		]);
+	}
+
+	/**
 	 * 自定义错误信息返回
 	 * @param $message
 	 * @return JsonResponse

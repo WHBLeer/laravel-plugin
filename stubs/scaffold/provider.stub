@@ -133,9 +133,10 @@ class $CLASS$ extends ServiceProvider
 	 */
 	public function registerBlade()
 	{
-		Blade::if('$LOWER_NAME$', function () {
-			$plugin = app('plugins.repository')->findOrFail('$PLUGIN$');
-			return $plugin && $plugin->isEnabled();
+		Blade::directive('$LOWER_NAME$', function ($expression) {
+			// return 'Plugin [$PLUGIN$] has been loaded';
+			// 可以在此处编辑插件标签
+			return url('/$LOWER_NAME$');
 		});
 	}
 
