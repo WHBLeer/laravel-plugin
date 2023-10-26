@@ -84,13 +84,8 @@ class $CLASS$ extends ServiceProvider
      */
     public function registerTranslations()
     {
-        $langPath = resource_path('lang/plugins/' . $this->pluginNameLower);
-
-        if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, $this->pluginNameLower);
-        } else {
-            $this->loadTranslationsFrom(plugin_path($this->pluginName, '$PATH_LANG$'), $this->pluginNameLower);
-        }
+        $jsonLang = plugin_path($this->pluginName, 'Resources/lang');
+		$this->loadJsonTranslationsFrom($jsonLang);
     }
 
 	/**
