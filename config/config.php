@@ -26,8 +26,6 @@ return [
 			'assets/logo'     => 'Resources/assets/logo.png',
 			'assets/lang'     => 'Resources/lang/en.json',
 			'readme'          => 'readme.md',
-			'webpack'         => 'webpack.mix.js',
-			'package'         => 'package.json',
 			'gitignore'       => '.gitignore',
 		],
 		'replacements' => [
@@ -40,7 +38,6 @@ return [
 			'views/master'    => ['LOWER_NAME', 'STUDLY_NAME'],
 			'scaffold/config' => ['STUDLY_NAME'],
 			'scaffold/helper' => ['STUDLY_NAME'],
-			'webpack'         => ['LOWER_NAME'],
 		],
 		'gitkeep' => true,
 	],
