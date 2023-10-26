@@ -34,19 +34,19 @@ class DownLoadCommand extends Command
 
                 return $rows;
             }, []);
-            $this->comment(__('plugins.plugin_list'));
+            $this->comment(__('plugin_list'));
 
             $this->table([
-                __('plugins.serial_number'),
-                __('plugins.name'),
-                __('plugins.author'),
-                __('plugins.download_times'),
+                __('serial_number'),
+                __('plugin_name'),
+                __('author'),
+                __('download_times'),
             ], $rows);
 
-            $sn = $this->ask(__('plugins.input_sn'));
+            $sn = $this->ask(__('input_sn'));
 
             if (! $plugin = data_get($plugins, $sn)) {
-                throw new \InvalidArgumentException(__('plugins.sn_not_exist'));
+                throw new \InvalidArgumentException(__('sn_not_exist'));
             }
 
             $versions = array_map(fn ($version) => [
@@ -58,28 +58,28 @@ class DownLoadCommand extends Command
                 $version['price'],
             ], data_get($plugin, 'versions'));
 
-            $this->comment(__('plugins.version_list'));
+            $this->comment(__('version_list'));
 
             $this->table([
-                __('plugins.id'),
-                __('plugins.version'),
-                __('plugins.description'),
-                __('plugins.download_times'),
-                __('plugins.status'),
-                __('plugins.price'),
+                __('id'),
+                __('version'),
+                __('description'),
+                __('download_times'),
+                __('status'),
+                __('price'),
             ], $versions);
 
-            $versionId = $this->ask(__('plugins.input_version_id'));
+            $versionId = $this->ask(__('input_version_id'));
 
             if (! in_array($versionId, Arr::pluck($plugin['versions'], 'id'))) {
-                throw new \InvalidArgumentException(__('plugins.version_not_exist'));
+                throw new \InvalidArgumentException(__('version_not_exist'));
             }
 
             Storage::put($path, app('plugins.client')->download($versionId));
 
             Artisan::call('plugin:install', ['path' => Storage::path($path)]);
 
-            $this->info(__('plugins.download_successful'));
+            $this->info(__('download_successful'));
         } catch (\Exception $exception) {
             $this->error($exception->getMessage());
 

@@ -140,9 +140,8 @@ class PluginServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../../config/config.php' => config_path('plugins.php'),
             ], 'laravel-plugin-config');
-            $this->publishes([
-                __DIR__.'/../../resources/lang' => resource_path('lang'),
-            ], 'laravel-plugin-lang');
+
+	        $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang');
 
             $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
         }
