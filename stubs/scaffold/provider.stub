@@ -3,9 +3,7 @@
 namespace $NAMESPACE$;
 
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
-use Plugins\$PLUGIN$\Support\StorageManager;
 
 class $CLASS$ extends ServiceProvider
 {
