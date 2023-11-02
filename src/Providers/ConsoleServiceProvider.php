@@ -22,6 +22,7 @@ use Sanlilin\LaravelPlugin\Console\Commands\PluginDeleteCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\PluginMakeCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\ProviderMakeCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\PublishCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\ReloadCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\RegisterCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\RouteProviderMakeCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\SeedMakeCommand;
@@ -60,7 +61,8 @@ class ConsoleServiceProvider extends ServiceProvider
         PluginDeleteCommand::class,
         InstallCommand::class,
         PublishCommand::class,
-        RegisterCommand::class,
+	    ReloadCommand::class,
+	    RegisterCommand::class,
         LoginCommand::class,
         UploadCommand::class,
         DownLoadCommand::class,
