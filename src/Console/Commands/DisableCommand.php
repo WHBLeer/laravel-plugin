@@ -33,6 +33,7 @@ class DisableCommand extends Command
 		 */
 		if ($this->argument('plugin') === null) {
 			$this->disableAll();
+			return 0;
 		}
 
 		/** @var Plugin $plugin */
