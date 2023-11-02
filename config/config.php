@@ -36,7 +36,7 @@ return [
 			'assets/lang'     => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'PROVIDER_NAMESPACE'],
 			'views/index'     => ['LOWER_NAME'],
 			'views/master'    => ['LOWER_NAME', 'STUDLY_NAME'],
-			'scaffold/config' => ['STUDLY_NAME'],
+			'scaffold/config' => ['LOWER_NAME', 'STUDLY_NAME'],
 			'scaffold/helper' => ['STUDLY_NAME'],
 		],
 		'gitkeep' => true,

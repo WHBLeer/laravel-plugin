@@ -1,5 +1,23 @@
 <?php
 
 return [
-    'name' => '$STUDLY_NAME$'
+    'name' => '$STUDLY_NAME$',
+
+    /*
+	|--------------------------------------------------------------------------
+	| 插件注册菜单
+	|--------------------------------------------------------------------------
+	|
+	| status：status=true时才注册菜单
+	| file：文件格式类型参考`app/Console/Commands/Init/data/menu.json`
+	| after_menu_hash设置：在after_menu后插入节点
+	| after_menu_hash不设置：在根节点最后插入节点
+	|
+	*/
+	'menu' => [
+		'status' => false,
+		'file' =>  'menu.json',
+		'after_hash' =>  '',
+		'source_by' =>  'plugin_$LOWER_NAME$',
+	],
 ];
