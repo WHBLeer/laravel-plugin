@@ -24,12 +24,6 @@ class DisableCommand extends Command
 	protected $description = 'Disable the specified plugin.';
 
 	/**
-	 *
-	 * @var array
-	 */
-	protected $plugin_config = [];
-
-	/**
 	 * Execute the console command.
 	 */
 	public function handle(): int
@@ -82,14 +76,16 @@ class DisableCommand extends Command
 	}
 
 	/**
-	 * 从系统中移除菜单
+	 * remove Menu
+	 * @param $plugin
 	 *
-	 * @return void
+	 * @author: hongbinwang
+	 * @time  : 2023/11/2 14:32
 	 */
 	public function removeMenu($plugin)
 	{
 		Menu::where('source_by',$plugin->config()['menu']['source_by'])->delete();
-		//修复树结构
+		// Repair tree structure
 		Menu::fixTree();
 	}
 

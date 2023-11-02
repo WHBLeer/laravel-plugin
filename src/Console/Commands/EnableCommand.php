@@ -2,6 +2,7 @@
 
 namespace Sanlilin\LaravelPlugin\Console\Commands;
 
+use Exception;
 use App\Models\Menu;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,7 @@ class EnableCommand extends Command
 	 * enableAll.
 	 *
 	 * @return void
+	 * @throws Exception
 	 */
 	public function enableAll(): array
 	{
@@ -77,11 +79,14 @@ class EnableCommand extends Command
 			}
 		}
 	}
+
 	/**
-	 * 添加菜单到系统中
+	 * insert Menu
+	 * @param $plugin
+	 * @throws Exception
 	 *
-	 * @return void
-	 * @throws \Exception
+	 * @author: hongbinwang
+	 * @time  : 2023/11/2 14:31
 	 */
 	public function insertMenu($plugin)
 	{
@@ -90,20 +95,20 @@ class EnableCommand extends Command
 		$newNodes = self::createMenus($menu_data,$plugin->config());
 		$after_menu_hash = $plugin->config()['menu']['after_hash'];
 		if (!!$after_menu_hash) {
-			// 在指定根节点或一级节点内添加
+			// Added to the specified root or level 1 node
 			$targetNode = Menu::withDepth()->where('hash',$after_menu_hash)->first();
 			if (!$targetNode->isRoot()) {
-				// 不是根节点
+				// Not root node
 				$targetNode = $targetNode->getRoot();
 			}
 		} else {
-			// 在所有节点后添加 查询最后一个根节点
+			// Added after the last root node
 			$targetNode = Menu::withDepth()->having('depth', '=', 0)->orderBy('id','desc')->first();
 		}
 		foreach ($newNodes as $newNode) {
 			if (!$newNode->parent_id) {
 				$nodeId = $newNode->id;
-				// $newNode移动到$targetNode后面
+				// The `$newNode` moves behind the `$targetNode`
 				$newNode->insertAfterNode($targetNode);
 				$targetNode = Menu::find($nodeId);
 			}
@@ -111,7 +116,29 @@ class EnableCommand extends Command
 	}
 
 	/**
-	 * @throws \Exception
+	 * Get the console command arguments.
+	 *
+	 * @return array
+	 */
+	protected function getArguments(): array
+	{
+		return [
+			['plugin', InputArgument::OPTIONAL, 'Plugin name.'],
+		];
+	}
+
+
+
+
+
+	/**
+	 * @param $data
+	 * @param $config
+	 * @return mixed
+	 * @throws Exception
+	 *
+	 * @author: hongbinwang
+	 * @time  : 2023/11/2 14:29
 	 */
 	private static function createMenus($data,$config)
 	{
@@ -177,17 +204,20 @@ class EnableCommand extends Command
 			}
 		}
 		DB::beginTransaction();
-		//关闭外键约束
-		DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-		DB::table('menus')->insert($menus);
-		DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-		DB::commit();
-		//修复树结构
-		Menu::fixTree();
-		return Menu::where('source_by',$config['menu']['source_by'])->get();
+		try {
+			DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+			DB::table('menus')->insert($menus);
+			DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+			DB::commit();
+			Menu::fixTree();
+			return Menu::where('source_by',$config['menu']['source_by'])->get();
+		} catch (Exception $exception) {
+			DB::rollback();
+			throw $exception;
+		}
 	}
 
-	private static function MenuHash($data,$source_by)
+	private static function MenuHash($data,$source_by): string
 	{
 		$data['source_by'] = $source_by;
 		if (isset($data['children'])) unset($data['children']);
@@ -197,21 +227,10 @@ class EnableCommand extends Command
 		return hash('md5',$str);
 	}
 
-	private static function GenerateUrl($route)
+	private static function GenerateUrl($route): string
 	{
 		if (!$route) return 'javascript:void(0);';
 		return '/'.(str_replace('.','/',$route));
 	}
 
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments(): array
-	{
-		return [
-			['plugin', InputArgument::OPTIONAL, 'Plugin name.'],
-		];
-	}
 }
