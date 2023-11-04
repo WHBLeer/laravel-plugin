@@ -80,7 +80,7 @@ class MigrateCommand extends Command
 	 */
 	protected function seeder(Plugin $plugin): void
 	{
-		if ($this->option('seed') || $this->option('seeder')) {
+		if ($this->option('seed')) {
 			$seederPath = plugin_path($plugin->getName(), '/Database/Seeders');
 			$namespace = '\\Plugins\\' . $plugin->getName() . '\\Database\\Seeders\\';
 			$files = File::allFiles($seederPath);

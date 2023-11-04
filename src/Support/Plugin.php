@@ -156,6 +156,16 @@ class Plugin
 	}
 
 	/**
+	 * Get name in upper case.
+	 *
+	 * @return string
+	 */
+	public function getUpperName(): string
+	{
+		return strtoupper($this->name);
+	}
+
+	/**
 	 * Get name in studly case.
 	 *
 	 * @return string
