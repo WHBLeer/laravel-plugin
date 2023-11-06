@@ -4,6 +4,8 @@ namespace Sanlilin\LaravelPlugin\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Sanlilin\LaravelPlugin\Providers\MenuServiceProvider;
+use Sanlilin\LaravelPlugin\Providers\RouteServiceProvider;
 use Sanlilin\LaravelPlugin\Contracts\ActivatorInterface;
 use Sanlilin\LaravelPlugin\Contracts\ClientInterface;
 use Sanlilin\LaravelPlugin\Contracts\RepositoryInterface;
@@ -20,6 +22,8 @@ class PluginServiceProvider extends ServiceProvider
     {
         $this->registerPlugins();
         $this->registerPublishing();
+	    $this->registerViews();
+	    $this->app->register(MenuServiceProvider::class);
     }
 
     /**
@@ -33,6 +37,8 @@ class PluginServiceProvider extends ServiceProvider
         $this->setupStubPath();
         $this->registerProviders();
 		$this->registerBlade();
+	    $this->app->register(RouteServiceProvider::class);
+	    
     }
 
     /**
@@ -111,6 +117,25 @@ class PluginServiceProvider extends ServiceProvider
     }
 
 	/**
+	 * Register views.
+	 *
+	 * @return void
+	 */
+	public function registerViews()
+	{
+		$sourcePath = __DIR__.'/../../resources/views';
+		$this->loadViewsFrom($sourcePath,'laravel-plugin');
+
+		if ($this->app->runningInConsole()) {
+			$viewPath = resource_path('views/vendor/laravel-plugin');
+
+			$this->publishes([
+				$sourcePath => $viewPath
+			], 'laravel-plugin-views');
+		}
+	}
+	
+	/**
 	 * Register blade.
 	 *
 	 * @return void
@@ -144,6 +169,7 @@ class PluginServiceProvider extends ServiceProvider
 	        $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang');
 
             $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+
         }
     }
 }

@@ -1,0 +1,38 @@
+[
+	{
+		"name": "SYSTEM",
+		"route_name": null,
+		"icon": "icon-product",
+		"params": null,
+		"is_show": 1,
+		"is_menu": 2,
+		"children": [
+			{
+				"name": "Plugin Management",
+				"route_name": null,
+				"icon": "icon-product",
+				"params": null,
+				"is_show": 1,
+				"is_menu": 1,
+				"children": [
+					{
+						"name": "Native Plugin",
+						"route_name": "seller.plugin.list",
+						"icon": "icon-product",
+						"params": null,
+						"is_show": 1,
+						"is_menu": 1
+					},
+					{
+						"name": "Plugin Market",
+						"route_name": "seller.plugin.market",
+						"icon": "icon-product",
+						"params": null,
+						"is_show": 1,
+						"is_menu": 1
+					}
+				]
+			}
+		]
+	}
+]
