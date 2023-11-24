@@ -64,5 +64,20 @@ class Controller extends BaseController
 		return response()->json($message);
 	}
 
-
+	/**
+	 * 通用方法：在保存模型时进行异常捕获
+	 * @param $model
+	 * @return string
+	 *
+	 * @author: hongbinwang
+	 * @time  : 2023/11/10 18:06
+	 */
+	public function modelSave($model): string
+	{
+		try {
+			return $model->save();
+		} catch (\Exception $e) {
+			return __('Error saving model:') . $e->getMessage();
+		}
+	}
 }

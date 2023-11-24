@@ -3,6 +3,7 @@
 namespace Sanlilin\LaravelPlugin\Providers;
 
 use InvalidArgumentException;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Sanlilin\LaravelPlugin\Models\Menu;
 
@@ -33,10 +34,13 @@ class MenuServiceProvider extends ServiceProvider
 	 * Sync menu data.
 	 *
 	 * @param  string  $type
-	 * @return void
+	 * @return void|bool
 	 */
 	protected function syncMenu($type)
 	{
+		if (!Schema::hasTable('menus')) {
+			return false;
+		}
 		switch ($type) {
 			case 'insert':
 				if (Menu::where('source_by', self::$source_by)->count() == 0) {
