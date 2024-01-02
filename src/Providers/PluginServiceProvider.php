@@ -149,6 +149,24 @@ class PluginServiceProvider extends ServiceProvider
 
 	}
 
+	/**
+	 * Register link.
+	 *
+	 * @return void
+	 */
+	public function registerLink()
+	{
+		$linkPath = public_path('assets/plugin/' . $this->pluginNameLower);
+		$targetPath = plugin_path($this->pluginName, 'Resources/assets');
+
+		if (!file_exists($linkPath) || !is_link($linkPath)) {
+			if (is_link($linkPath)) {
+				$this->app->make('files')->delete($linkPath);
+			}
+			$this->app->make('files')->link($targetPath, $linkPath);
+		}
+	}
+
     /**
      * Get the services provided by the provider.
      *

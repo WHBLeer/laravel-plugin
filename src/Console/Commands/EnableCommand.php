@@ -134,7 +134,7 @@ class EnableCommand extends Command
 	/**
 	 * @param $data
 	 * @param $config
-	 * @return mixed
+	 * @return \mixed
 	 * @throws Exception
 	 *
 	 * @author: hongbinwang

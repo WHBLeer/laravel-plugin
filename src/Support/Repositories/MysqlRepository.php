@@ -41,7 +41,7 @@ class MysqlRepository
     }
 
     /**
-     * @param  mixed  ...$args
+     * @param  \mixed  ...$args
      * @return Plugin
      */
     protected function createPlugin(...$args): Plugin
@@ -60,7 +60,7 @@ class MysqlRepository
     /**
      * Get all plugins.
      *
-     * @return mixed
+     * @return \mixed
      */
     public function all(): Collection
     {
@@ -126,7 +126,7 @@ class MysqlRepository
     /**
      * Get list of disabled plugins.
      *
-     * @return mixed
+     * @return \mixed
      */
     public function allDisabled()
     {
@@ -146,7 +146,7 @@ class MysqlRepository
      * Get all ordered plugins.
      *
      * @param  string  $direction
-     * @return mixed
+     * @return \mixed
      */
     public function getOrdered($direction = 'asc')
     {
@@ -226,7 +226,7 @@ class MysqlRepository
      *
      * @param  string  $key
      * @param  string|null  $default
-     * @return mixed
+     * @return \mixed
      */
     public function config(string $key, $default = null)
     {

@@ -12,7 +12,7 @@ interface RepositoryInterface
     /**
      * Get all plugins.
      *
-     * @return mixed
+     * @return \mixed
      */
     public function all();
 
@@ -47,14 +47,14 @@ interface RepositoryInterface
     /**
      * Get list of enabled plugins.
      *
-     * @return mixed
+     * @return \mixed
      */
     public function allEnabled();
 
     /**
      * Get list of disabled plugins.
      *
-     * @return mixed
+     * @return \mixed
      */
     public function allDisabled();
 
@@ -69,7 +69,7 @@ interface RepositoryInterface
      * Get all ordered plugins.
      *
      * @param  string  $direction
-     * @return mixed
+     * @return \mixed
      */
     public function getOrdered($direction = 'asc');
 
@@ -123,7 +123,7 @@ interface RepositoryInterface
      *
      * @param  string  $key
      * @param  string|null  $default
-     * @return mixed
+     * @return \mixed
      */
     public function config(string $key, $default = null);
 
