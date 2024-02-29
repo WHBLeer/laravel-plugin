@@ -23,7 +23,11 @@ class PluginServiceProvider extends ServiceProvider
         $this->registerPlugins();
         $this->registerPublishing();
 	    $this->registerViews();
-	    $this->app->register(MenuServiceProvider::class);
+
+	    $menusshow = $this->app['config']->get('plugins.menusshow');
+	    if($menusshow){
+		    $this->app->register(MenuServiceProvider::class);
+	    }
     }
 
     /**
