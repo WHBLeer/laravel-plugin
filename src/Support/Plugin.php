@@ -28,18 +28,14 @@ class Plugin
 	protected ApplicationContract $app;
 
 	/**
-	 * The plugin name.
-	 *
-	 * @var string
+	 * @var string|null
 	 */
-	protected string $name;
+	protected ?string $name = null; // 允许 null
 
 	/**
-	 * The plugin path.
-	 *
-	 * @var string
+	 * @var string|null
 	 */
-	protected string $path;
+	protected ?string $path = null; // 允许 null
 
 	/**
 	 * @var array of cached Json objects, keyed by filename
@@ -70,13 +66,9 @@ class Plugin
 	 * Plugin constructor.
 	 *
 	 * @param  ApplicationContract  $app
-	 * @param  string  $name
-	 * @param  string  $path
 	 */
-	public function __construct(ApplicationContract $app, string $name, string $path)
+	public function __construct(ApplicationContract $app)
 	{
-		$this->name = $name;
-		$this->path = $path;
 		$this->cache = $app['cache'];
 		$this->files = $app['files'];
 		$this->translator = $app['translator'];
@@ -134,6 +126,14 @@ class Plugin
 		foreach ($this->get('aliases', []) as $aliasName => $aliasClass) {
 			$loader->alias($aliasName, $aliasClass);
 		}
+	}
+	/**
+	 * 动态设置 name
+	 */
+	public function setName(string $name): self
+	{
+		$this->name = $name;
+		return $this;
 	}
 
 	/**
