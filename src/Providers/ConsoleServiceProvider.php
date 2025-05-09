@@ -28,6 +28,7 @@ use Sanlilin\LaravelPlugin\Console\Commands\RegisterCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\RouteProviderMakeCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\SeedMakeCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\UploadCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\InstallPluginsSystemCommand;
 
 class ConsoleServiceProvider extends ServiceProvider
 {
@@ -44,6 +45,7 @@ class ConsoleServiceProvider extends ServiceProvider
      * @var array
      */
     protected array $commands = [
+	    InstallPluginsSystemCommand::class,
         PluginCommand::class,
         PluginMakeCommand::class,
         ProviderMakeCommand::class,
