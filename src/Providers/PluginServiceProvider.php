@@ -4,7 +4,6 @@ namespace Sanlilin\LaravelPlugin\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Sanlilin\LaravelPlugin\Support\PluginManager;
 use Sanlilin\LaravelPlugin\Providers\MenuServiceProvider;
 use Sanlilin\LaravelPlugin\Providers\RouteServiceProvider;
 use Sanlilin\LaravelPlugin\Contracts\ActivatorInterface;
@@ -154,24 +153,6 @@ class PluginServiceProvider extends ServiceProvider
 
 	}
 
-	/**
-	 * Register link.
-	 *
-	 * @return void
-	 */
-	public function registerLink()
-	{
-		$linkPath = public_path('assets/plugin/' . $this->pluginNameLower);
-		$targetPath = plugin_path($this->pluginName, 'Resources/assets');
-
-		if (!file_exists($linkPath) || !is_link($linkPath)) {
-			if (is_link($linkPath)) {
-				$this->app->make('files')->delete($linkPath);
-			}
-			$this->app->make('files')->link($targetPath, $linkPath);
-		}
-	}
-
     /**
      * Get the services provided by the provider.
      *
@@ -185,9 +166,17 @@ class PluginServiceProvider extends ServiceProvider
     private function registerPublishing(): void
     {
         if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../../config/config.php' => config_path('plugins.php'),
-            ], 'laravel-plugin-config');
+	        $this->publishes([
+		        __DIR__.'/../../config/config.php' => config_path('laravel-plugin.php'),
+	        ], 'laravel-plugin-config');
+
+	        $this->publishes([
+		        __DIR__.'/../../resources/views' => resource_path('views/vendor/laravel-plugin'),
+	        ], 'laravel-plugin-views');
+
+	        $this->publishes([
+		        __DIR__.'/../../Resources/assets' => public_path('assets/vendor/laravel-plugin'),
+	        ], 'laravel-plugin-assets');
 
 	        $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang');
 

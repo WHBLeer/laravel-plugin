@@ -105,7 +105,7 @@ return [
 	'cache' => [
 		'enabled'  => false,
 		'key'      => 'laravel-plugin',
-		'lifetime' => 60,
+		'lifetime' => 3600,
 	],
 	'register' => [
 		'translations' => true,
