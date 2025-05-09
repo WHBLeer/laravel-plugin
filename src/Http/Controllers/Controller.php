@@ -3,7 +3,6 @@
 namespace Sanlilin\LaravelPlugin\Http\Controllers;
 
 
-use Sanlilin\LaravelPlugin\Support\Plugin;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -12,19 +11,8 @@ class Controller extends \Illuminate\Routing\Controller
 {
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-	/**
-	 * @var Plugin
-	 */
-	protected Plugin $plugin;
-
-	/**
-	 * CompressPlugin constructor.
-	 *
-	 * @param  Plugin  $plugin
-	 */
-	public function __construct(Plugin $plugin)
+	public function __construct()
 	{
-		$this->plugin = $plugin;
 	}
 
 	protected function respond($type = 'success', $message = null, $data = null)
