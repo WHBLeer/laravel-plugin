@@ -18,16 +18,21 @@ return [
 		'files'   => [
 			'routes/web'      => 'Routes/web.php',
 			'routes/api'      => 'Routes/api.php',
+			'routes/admin'    => 'Routes/admin.php',
 			'views/index'     => 'Resources/views/index.blade.php',
-			'views/master'    => 'Resources/views/layouts/master.blade.php',
-			'scaffold/config'  => 'Config/config.php',
+			'views/create'    => 'Resources/views/create.blade.php',
+			'views/edit'      => 'Resources/views/edit.blade.php',
+			'views/show'      => 'Resources/views/show.blade.php',
+			'views/config'    => 'Resources/views/config.blade.php',
+			'scaffold/config' => 'Config/config.php',
 			'scaffold/helper' => 'Support/helper.php',
 			'assets/js/app'   => 'Resources/assets/js/app.js',
 			'assets/css/app'  => 'Resources/assets/css/app.css',
 			'assets/logo'     => 'Resources/assets/logo.png',
-			'assets/lang'     => 'Resources/lang/en.json',
+			'lang/en'         => 'Resources/lang/en.json',
+			'lang/zh'         => 'Resources/lang/zh.json',
 			'readme'          => 'readme.md',
-			'menu'            => 'menu.json',
+			'permission'      => 'permission.json',
 			'gitignore'       => '.gitignore',
 		],
 		'replacements' => [
@@ -38,7 +43,9 @@ return [
 			'readme'          => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'PROVIDER_NAMESPACE'],
 			'assets/lang'     => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'PROVIDER_NAMESPACE'],
 			'views/index'     => ['LOWER_NAME'],
-			'views/master'    => ['LOWER_NAME', 'STUDLY_NAME'],
+			'views/create'     => ['LOWER_NAME'],
+			'views/edit'     => ['LOWER_NAME'],
+			'views/show'    => ['LOWER_NAME', 'STUDLY_NAME'],
 			'scaffold/config'  => ['LOWER_NAME', 'STUDLY_NAME'],
 			'scaffold/helper' => ['STUDLY_NAME'],
 		],
@@ -49,7 +56,7 @@ return [
 		'plugins' => base_path('plugins'),
 
 		// 资源发布目录
-		'assets' => public_path('plugins'),
+		'assets' => public_path('assets/vendor/plugins'),
 
 		// 默认应用创建目录结构
 		'generator' => [
@@ -60,6 +67,7 @@ return [
 			'controller' => ['path' => 'Http/Controllers', 'generate' => true],
 			'model'      => ['path' => 'Models', 'generate' => true],
 			'provider'   => ['path' => 'Providers', 'generate' => true],
+			'services'   => ['path' => 'Services', 'generate' => true],
 			'assets'     => ['path' => 'Resources/assets', 'generate' => true],
 			'lang'       => ['path' => 'Resources/lang', 'generate' => true],
 			'views'      => ['path' => 'Resources/views', 'generate' => true],
@@ -94,9 +102,6 @@ return [
 		'plugins.deleted' => [],
 	],
 
-	// 自定义命令
-	'commands' => [],
-
 	'cache' => [
 		'enabled'  => false,
 		'key'      => 'laravel-plugin',
@@ -110,7 +115,7 @@ return [
 	'activators' => [
 		'file' => [
 			'class'          => \Sanlilin\LaravelPlugin\Activators\FileActivator::class,
-			'statuses-file'  => base_path('plugin_statuses.json'),
+			'statuses-file'  => storage_path('plugins.json'),
 			'cache-key'      => 'activator.installed',
 			'cache-lifetime' => 604800,
 		],

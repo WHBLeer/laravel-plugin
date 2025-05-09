@@ -3,6 +3,8 @@
 namespace Sanlilin\LaravelPlugin\Support;
 
 use Illuminate\Cache\CacheManager;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\AliasLoader;
@@ -185,6 +187,16 @@ class Plugin
 	}
 
 	/**
+	 * Get name in slug case.
+	 *
+	 * @return string
+	 */
+	public function getSlugName(): string
+	{
+		return Str::slug($this->name);
+	}
+
+	/**
 	 * Get description.
 	 *
 	 * @return string
@@ -194,6 +206,26 @@ class Plugin
 		return $this->get('description');
 	}
 
+
+	public function getVersion()
+	{
+		return $this->config['version'] ?? '1.0.0';
+	}
+
+	public function getAuthor()
+	{
+		return $this->config['author'] ?? [
+			'name' => 'Wanghongbin',
+			'website' => 'https://github.com/WHBLeer/laravel-plugin',
+			'email' => 'wanghongbin816@gmail.com',
+		];
+	}
+
+	public function getEmail()
+	{
+		return $this->config['email'] ?? 'wanghongbin816@gmail.com';
+	}
+
 	/**
 	 * Get logo.
 	 *
@@ -201,7 +233,9 @@ class Plugin
 	 */
 	public function getLogo(): string
 	{
-		return $this->get('logo');
+		return file_exists($this->getPath().$this->get('logo'))
+			? $this->getPath().$this->get('logo')
+			: plugin_logo($this->getName());
 	}
 
 	/**
@@ -260,19 +294,37 @@ class Plugin
 	/**
 	 * Get config contents from the cache, setting as needed.
 	 *
-	 * @param  string|null  $file
 	 * @return \mixed
 	 */
-	public function config(?string $file = null)
+	public function config()
 	{
-		if ($file === null) {
-			$file = '/Config/config.php';
-		}
+		$file = '/Config/config.php';
 		$configPath = $this->getPath().$file;
 		if (file_exists($configPath)) {
 			return require $configPath;
 		}
 		return null;
+	}
+
+	/**
+	 * Set config data in json file by given the key and value.
+	 *
+	 * @param array $values
+	 * @return bool
+	 */
+	public function setConfig(array $values)
+	{
+		$file = '/Config/config.php';
+		$configPath = $this->getPath().$file;
+		if (file_exists($configPath)) {
+			$config = include $configPath;
+			$config = array_merge($config, $values);
+			file_put_contents($configPath, '<?php return ' . var_export($config, true) . ';');
+			// 清除配置缓存
+			Artisan::call('config:clear');
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -319,6 +371,7 @@ class Plugin
 	{
 		return $this->json()->get($key, $default);
 	}
+
 
 	/**
 	 * @param $key
@@ -506,4 +559,5 @@ class Plugin
 	{
 		$this->translator->addNamespace($namespace, $path);
 	}
+
 }

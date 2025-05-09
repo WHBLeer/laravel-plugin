@@ -4,6 +4,7 @@ namespace Sanlilin\LaravelPlugin\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Sanlilin\LaravelPlugin\Support\PluginManager;
 use Sanlilin\LaravelPlugin\Providers\MenuServiceProvider;
 use Sanlilin\LaravelPlugin\Providers\RouteServiceProvider;
 use Sanlilin\LaravelPlugin\Contracts\ActivatorInterface;

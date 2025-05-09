@@ -4,6 +4,7 @@ namespace Sanlilin\LaravelPlugin\Providers;
 
 use Carbon\Laravel\ServiceProvider;
 use Illuminate\Support\Str;
+use Sanlilin\LaravelPlugin\Console\Commands\LocalCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\ComposerInstallCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\ComposerRemoveCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\ComposerRequireCommand;
@@ -66,7 +67,7 @@ class ConsoleServiceProvider extends ServiceProvider
         LoginCommand::class,
         UploadCommand::class,
         DownLoadCommand::class,
-
+	    LocalCommand::class
     ];
 
     /**
@@ -76,7 +77,7 @@ class ConsoleServiceProvider extends ServiceProvider
     {
         $commands = [];
 
-        foreach ((config('plugins.commands') ?: $this->commands) as $command) {
+        foreach ($this->commands as $command) {
             $commands[] = Str::contains($command, $this->consoleNamespace) ?
                 $command :
                 $this->consoleNamespace.'\\'.$command;

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('providers')->default('');
             $table->unsignedTinyInteger('status')->default(0);
             $table->string('version')->default('');
-            $table->string('logo')->default('');
+            $table->string('cover')->default('');
 	        $table->json('author')->nullable();
             $table->json('composer')->nullable();
             $table->timestamps();

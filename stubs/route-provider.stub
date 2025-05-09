@@ -36,6 +36,8 @@ class $CLASS$ extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
+
+        $this->mapAdminRoutes();
     }
 
     /**
@@ -53,6 +55,22 @@ class $CLASS$ extends ServiceProvider
     }
 
     /**
+     * Define the "admin" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapAdminRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->pluginNamespace)
+            ->prefix('admin')
+			->as('admin.')
+            ->group(plugin_path('$PLUGIN$', '$WEB_ROUTES_PATH$'));
+    }
+
+    /**
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
@@ -61,9 +79,9 @@ class $CLASS$ extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('api')
-            ->middleware('api')
+        Route::middleware('api')
             ->namespace($this->pluginNamespace)
-            ->group(plugin_path('$PLUGIN$', '$API_ROUTES_PATH$'));
+            ->prefix('api')
+		  	->group(plugin_path('$PLUGIN$', '$API_ROUTES_PATH$'));
     }
 }

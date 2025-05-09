@@ -478,4 +478,12 @@ class PluginGenerator implements GeneratorInterface
     {
         return str_replace('\\', '\\\\', GenerateConfigReader::read('provider')->getNamespace());
     }
+
+	/**
+	 * @return string
+	 */
+	protected function getTraitNamespaceReplacement(): string
+	{
+		return str_replace('\\', '\\\\', GenerateConfigReader::read('provider')->getNamespace());
+	}
 }

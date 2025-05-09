@@ -1,7 +1,7 @@
 {
     "name": "$STUDLY_NAME$",
     "alias": "$LOWER_NAME$",
-    "description": "",
+    "description": "专为ENewShop开发的【$STUDLY_NAME$】插件",
     "logo": "logo.png",
     "version": "1.0.0",
     "keywords": ["ENewShop插件","$STUDLY_NAME$"],
@@ -16,5 +16,7 @@
     ],
     "aliases": {},
     "files": [],
-    "requires": []
+    "requires": {
+        "sanlilin/admin-plugins": "^1.3",
+    }
 }

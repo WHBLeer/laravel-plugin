@@ -1,0 +1,8 @@
+<?php
+return [
+	'DummyName' => 'DummyName',
+	'DummyName Add' => '创建 DummyName',
+	'DummyName Edit' => '编辑 DummyName',
+	'DummyName Show' => '查看 DummyName',
+	'DummyName Settings' => 'DummyName 配置',
+];

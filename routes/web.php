@@ -3,15 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use Sanlilin\LaravelPlugin\Http\Controllers\LaravelPluginController;
 
-Route::group(['as' => 'seller.', 'prefix' => 'seller', 'middleware' => ['auth','seller'],], function () {
-	Route::group(['as' =>'plugin.','prefix'=>'plugin'], function () {
-		Route::get('/list',[LaravelPluginController::class,'list'])->name('list');
+Route::middleware(['auth:admin'])->as('admin.')->prefix('admin')->group(function () {
+	Route::as('plugin.')->prefix('plugin')->group(function () {
+		Route::get('/',[LaravelPluginController::class,'index']);
 		Route::get('/market',[LaravelPluginController::class,'market'])->name('market');
 		Route::post('/disable',[LaravelPluginController::class,'disable'])->name('disable');
 		Route::post('/enable',[LaravelPluginController::class,'enable'])->name('enable');
 		Route::post('/delete',[LaravelPluginController::class,'delete'])->name('delete');
 		Route::post('/batch',[LaravelPluginController::class,'batch'])->name('batch');
 		Route::any('/install',[LaravelPluginController::class,'install'])->name('install');
+		Route::any('/local',[LaravelPluginController::class,'local'])->name('local');
 		Route::any('/publish',[LaravelPluginController::class,'publish'])->name('publish');
 		Route::any('/register',[LaravelPluginController::class,'register'])->name('register');
 		Route::any('/login',[LaravelPluginController::class,'login'])->name('login');

@@ -1,0 +1,27 @@
+<?php
+use Illuminate\Support\Facades\Route;
+use $CLASS_NAMESPACE$\$STUDLY_NAME$Controller;
+use $PLUGIN_NAMESPACE$\$PLUGIN$\$CONTROLLER_NAMESPACE$\$STUDLY_NAME$Controller;
+
+/*
+|--------------------------------------------------------------------------
+| Backend Routes
+|--------------------------------------------------------------------------
+*/
+
+/**
+ * 后端
+ */
+Route::prefix('$LOWER_NAME$')->as('$LOWER_NAME$.')->group(function() {
+	Route::get('/', [$STUDLY_NAME$Controller::class,'index']);
+	Route::any('/create', [$STUDLY_NAME$Controller::class,'create'])->name('create');
+	Route::get('/{id}/show', [$STUDLY_NAME$Controller::class,'show'])->name('show');
+	Route::get('/{id}/edit', [$STUDLY_NAME$Controller::class,'edit'])->name('edit');
+	Route::put('/{id}/update', [$STUDLY_NAME$Controller::class,'update'])->name('update');
+	Route::post('/{id}/save', [$STUDLY_NAME$Controller::class,'save'])->name('save');
+	Route::post('/destroy', [$STUDLY_NAME$Controller::class,'destroy'])->name('destroy');
+
+	//  Config
+	Route::get('/config', [$STUDLY_NAME$ConfigController::class,'edit'])->name('config.edit');
+	Route::post('/config', [$STUDLY_NAME$ConfigController::class,'update'])->name('config.update');
+});

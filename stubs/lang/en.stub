@@ -1,0 +1,8 @@
+<?php
+return [
+	'DummyName' => 'DummyName',
+	'DummyName Add' => 'DummyName Add',
+	'DummyName Edit' => 'DummyName Edit',
+	'DummyName Show' => 'DummyName Show',
+	'DummyName Settings' => 'DummyName Settings',
+];
