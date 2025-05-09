@@ -189,24 +189,27 @@ class LaravelPluginController extends Controller
 	/**
 	 * Setting the specified plugin.
 	 * 配置指定的插件。
-	 *
 	 * @param Request $request
+	 * @return Factory|View|\Illuminate\Foundation\Application|JsonResponse|\Illuminate\Http\RedirectResponse|object
 	 *
-	 * @return JsonResponse
 	 * @author: hongbinwang
-	 * @time  : 2023/10/18 15:23
+	 * @time  : 2025/5/10 上午2:24
 	 */
 	public function setting(Request $request)
 	{
 		/** @var Plugin $plugin */
 		$plugin = app('plugins.repository')->findOrFail($request->plugin);
+		if ($request->ajax()) {
+			if ($plugin->setConfig($request->configs??[])) {
 
-		if ($plugin->setConfig($request->configs??[])) {
-
-			return $this->respond('success',"Plugin [{$plugin->getName()}] config set successful.");
-		} else {
-			return $this->respond('error',"Plugin [{$plugin->getName()}] config file not exist");
+				return $this->respond('success',"Plugin [{$plugin->getName()}] config set successful.");
+			} else {
+				return $this->respond('error',"Plugin [{$plugin->getName()}] config file not exist");
+			}
 		}
+		$configs = $plugin->config();
+
+		return view('laravel-plugin::setting',compact('plugin','configs'));
 	}
 
 	/**

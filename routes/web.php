@@ -9,9 +9,9 @@ Route::middleware(['auth:admin'])->as('admin.')->prefix('admin')->group(function
 		Route::get('/market',[LaravelPluginController::class,'market'])->name('market');
 		Route::post('/disable',[LaravelPluginController::class,'disable'])->name('disable');
 		Route::post('/enable',[LaravelPluginController::class,'enable'])->name('enable');
-		Route::post('/setting',[LaravelPluginController::class,'setting'])->name('setting');
 		Route::post('/delete',[LaravelPluginController::class,'delete'])->name('delete');
 		Route::post('/batch',[LaravelPluginController::class,'batch'])->name('batch');
+		Route::any('/setting',[LaravelPluginController::class,'setting'])->name('setting');
 		Route::any('/install',[LaravelPluginController::class,'install'])->name('install');
 		Route::any('/local',[LaravelPluginController::class,'local'])->name('local');
 		Route::any('/publish',[LaravelPluginController::class,'publish'])->name('publish');

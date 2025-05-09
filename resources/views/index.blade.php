@@ -3,7 +3,7 @@
 @section('css')
 	<!-- glight css -->
 	<link rel="stylesheet" href="{{asset('assets/vendor/glightbox/glightbox.min.css')}}">
-	<link rel="stylesheet" href="{{asset('assets/vendor/plugins/style.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/vendor/laravel-plugin/style.css')}}">
 @endsection
 @section('main-content')
 	<div class="container-fluid">
@@ -67,6 +67,6 @@
 	<script src="{{asset('assets/vendor/glightbox/glightbox.min.js')}}"></script>
 	
 	<!--js-->
-	<script src="{{asset('assets/vendor/plugins/script.js')}}"></script>
+	<script src="{{asset('assets/vendor/laravel-plugin/script.js')}}"></script>
 @endsection
 
