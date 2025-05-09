@@ -37,7 +37,6 @@ class MigrateCommand extends Command
 			$this->seeder($plugin);
 			return 0;
 		}
-		/** @var Plugin $plugin */
 		foreach ($this->laravel['plugins.repository']->getOrdered($this->option('direction')) as $plugin) {
 			$this->line('Running for plugin: <info>'.$plugin->getName().'</info>');
 

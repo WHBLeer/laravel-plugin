@@ -272,7 +272,6 @@ class FileRepository implements RepositoryInterface
     {
         $plugins = [];
 
-        /** @var Plugin $plugin */
         foreach ($this->all() as $name => $plugin) {
             if ($plugin->isStatus($status)) {
                 $plugins[$name] = $plugin;
@@ -373,7 +372,6 @@ class FileRepository implements RepositoryInterface
      */
     public function register(): void
     {
-        /** @var Plugin $plugin */
         foreach ($this->getOrdered() as $plugin) {
             $plugin->register();
         }

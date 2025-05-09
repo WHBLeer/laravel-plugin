@@ -38,7 +38,6 @@ class ReloadCommand extends Command
 			return 0;
 		}
 
-		/** @var Plugin $plugin */
 		$plugin = $this->laravel['plugins.repository']->findOrFail($this->argument('plugin'));
 		if ($plugin->isEnabled()) $plugin->disable();
 
@@ -59,7 +58,6 @@ class ReloadCommand extends Command
 	public function reloadAll(): void
 	{
 		$plugins = $this->laravel['plugins.repository']->all();
-		/** @var Plugin $plugin */
 		foreach ($plugins as $plugin) {
 			if ($plugin->isEnabled()) $plugin->disable();
 

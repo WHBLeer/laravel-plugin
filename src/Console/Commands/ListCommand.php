@@ -41,7 +41,6 @@ class ListCommand extends Command
     {
         $rows = [];
 
-        /** @var Plugin $plugin */
         foreach ($this->getPlugins() as $plugin) {
             $rows[] = [
                 $plugin->getName(),

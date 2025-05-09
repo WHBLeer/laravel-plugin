@@ -44,7 +44,6 @@ class PublishCommand extends Command
      */
     public function publishAll(): void
     {
-        /** @var Plugin $plugin */
         foreach ($this->laravel['plugins.repository']->allEnabled() as $plugin) {
             $this->publish($plugin);
         }
