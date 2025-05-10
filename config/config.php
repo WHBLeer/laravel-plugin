@@ -103,7 +103,7 @@ return [
 
 	'cache' => [
 		'enabled'  => false,
-		'key'      => 'laravel-plugin',
+		'key'      => 'plugins',
 		'lifetime' => 3600,
 	],
 	'register' => [

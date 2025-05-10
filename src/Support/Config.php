@@ -60,6 +60,6 @@ class Config
      */
     protected static function path(): string
     {
-        return ($_SERVER['HOME'] ?? $_SERVER['USERPROFILE']).'/.laravel-plugin/config.json';
+        return ($_SERVER['HOME'] ?? $_SERVER['USERPROFILE']).'/.plugins/config.json';
     }
 }

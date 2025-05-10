@@ -128,14 +128,14 @@ class PluginServiceProvider extends ServiceProvider
 	public function registerViews()
 	{
 		$sourcePath = __DIR__.'/../../resources/views';
-		$this->loadViewsFrom($sourcePath,'laravel-plugin');
+		$this->loadViewsFrom($sourcePath,'plugins');
 
 		if ($this->app->runningInConsole()) {
-			$viewPath = resource_path('views/vendor/laravel-plugin');
+			$viewPath = resource_path('views/vendor/plugins');
 
 			$this->publishes([
 				$sourcePath => $viewPath
-			], 'laravel-plugin-views');
+			], 'plugins-views');
 		}
 	}
 	
@@ -167,16 +167,16 @@ class PluginServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
 	        $this->publishes([
-		        __DIR__.'/../../config/config.php' => config_path('laravel-plugin.php'),
-	        ], 'laravel-plugin-config');
+		        __DIR__.'/../../config/config.php' => config_path('plugins.php'),
+	        ], 'plugins-config');
 
 	        $this->publishes([
-		        __DIR__.'/../../resources/views' => resource_path('views/vendor/laravel-plugin'),
-	        ], 'laravel-plugin-views');
+		        __DIR__.'/../../resources/views' => resource_path('views/vendor/plugins'),
+	        ], 'plugins-views');
 
 	        $this->publishes([
-		        __DIR__.'/../../Resources/assets' => public_path('assets/vendor/laravel-plugin'),
-	        ], 'laravel-plugin-assets');
+		        __DIR__.'/../../resources/assets' => public_path('assets/vendor/plugins'),
+	        ], 'plugins-assets');
 
 	        $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang');
 

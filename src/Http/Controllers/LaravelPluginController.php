@@ -93,7 +93,7 @@ class LaravelPluginController extends Controller
 		$enabled = count(app('plugins.repository')->getByStatus(1));
 		$disabled = count(app('plugins.repository')->getByStatus(0));
 		$all = count(app('plugins.repository')->all());
-		return view('laravel-plugin::index',compact('plugins','status','enabled','disabled','all'));
+		return view('plugins::index',compact('plugins','status','enabled','disabled','all'));
 	}
 
 	/**
@@ -133,7 +133,7 @@ class LaravelPluginController extends Controller
 				$version['price'],
 			], data_get($plugin, 'versions'));
 		}
-		return view('laravel-plugin::market',compact('rows'));
+		return view('plugins::market',compact('rows'));
 	}
 
 	/**

@@ -21,15 +21,15 @@ class InstallPluginsSystemCommand extends Command
 		// 发布资源
 		$this->call('vendor:publish', [
 			'--provider' => 'Sanlilin\LaravelPlugin\Providers\PluginServiceProvider',
-			'--tag' => 'laravel-plugin-config'
+			'--tag' => 'plugins-config'
 		]);
 		$this->call('vendor:publish', [
 			'--provider' => 'Sanlilin\LaravelPlugin\Providers\PluginServiceProvider',
-			'--tag' => 'laravel-plugin-views'
+			'--tag' => 'plugins-views'
 		]);
 		$this->call('vendor:publish', [
 			'--provider' => 'Sanlilin\LaravelPlugin\Providers\PluginServiceProvider',
-			'--tag' => 'laravel-plugin-assets'
+			'--tag' => 'plugins-assets'
 		]);
 
 		$this->info('Plugins system installed successfully!');
