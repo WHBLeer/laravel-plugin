@@ -1,15 +1,15 @@
 @extends('layout.master')
-@section('title', 'Plugin Settings: ' . $plugin->getName())
+@section('title', 'Plugin Settings: ' . $plugin->getTitle())
 @section('css')
 	<!-- glight css -->
 	<link rel="stylesheet" href="{{asset('assets/vendor/glightbox/glightbox.min.css')}}">
-	<link rel="stylesheet" href="{{asset('assets/vendor/laravel-plugin/style.css')}}">
+	<link rel="stylesheet" href="{{asset('assets/vendor/plugins/style.css')}}">
 @endsection
 @section('main-content')
 	<div class="container-fluid">
 		<div class="row mb-4">
 			<div class="col-md-6">
-				<h2>Plugin Settings: {{ $plugin->getName() }}</h2>
+				<h2>Plugin Settings: {{ $plugin->getTitle() }}</h2>
 			</div>
 		</div>
 		
@@ -19,8 +19,10 @@
 					<div class="alert alert-success">{{ session('success') }}</div>
 				@endif
 				
-				<form action="{{ route('admin.plugin.setting', $plugin->getName()) }}" method="POST">
+				<form action="{{ route('admin.plugin.settings.update', $plugin->getName()) }}" method="POST">
 					@csrf
+					@method('PUT')
+					
 					<div class="form-group">
 						<label for="enabled">Status</label>
 						<select class="form-control" id="enabled" name="enabled" disabled>
@@ -31,7 +33,7 @@
 					</div>
 					
 					<!-- 这里可以根据插件的配置项动态生成表单 -->
-					@foreach($configs as $key => $value)
+					@foreach($plugin->getConfig() as $key => $value)
 						@if(!in_array($key, ['name', 'title', 'version', 'description', 'enabled']))
 							<div class="form-group">
 								<label for="{{ $key }}">{{ ucfirst(str_replace('_', ' ', $key)) }}</label>
@@ -53,7 +55,7 @@
 					@endforeach
 					
 					<button type="submit" class="btn btn-primary">Save Settings</button>
-					<a href="{{ route('admin.plugin') }}" class="btn btn-secondary">Back to List</a>
+					<a href="{{ route('admin.plugin.index') }}" class="btn btn-secondary">Back to List</a>
 				</form>
 			</div>
 		</div>

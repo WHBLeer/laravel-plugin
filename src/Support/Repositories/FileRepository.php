@@ -272,6 +272,7 @@ class FileRepository implements RepositoryInterface
     {
         $plugins = [];
 
+        /** @var Plugin $plugin */
         foreach ($this->all() as $name => $plugin) {
             if ($plugin->isStatus($status)) {
                 $plugins[$name] = $plugin;
@@ -372,6 +373,7 @@ class FileRepository implements RepositoryInterface
      */
     public function register(): void
     {
+        /** @var Plugin $plugin */
         foreach ($this->getOrdered() as $plugin) {
             $plugin->register();
         }
@@ -397,6 +399,7 @@ class FileRepository implements RepositoryInterface
     public function find(string $name): ?Plugin
     {
         foreach ($this->all() as $plugin) {
+	        $plugin->setName($name);
             if ($plugin->getLowerName() === strtolower($name)) {
                 return $plugin;
             }
@@ -482,11 +485,7 @@ class FileRepository implements RepositoryInterface
      */
     public function getPluginPath(string $pluginName): string
     {
-        try {
-            return $this->findOrFail($pluginName)->getPath().'/';
-        } catch (PluginNotFoundException $e) {
-            return $this->getPath().'/'.Str::studly($pluginName).'/';
-        }
+        return $this->getPath().'/'.Str::studly($pluginName).'/';
     }
 
     /**

@@ -23,7 +23,6 @@ return [
 			'views/create'    => 'Resources/views/create.blade.php',
 			'views/edit'      => 'Resources/views/edit.blade.php',
 			'views/show'      => 'Resources/views/show.blade.php',
-			'views/config'    => 'Resources/views/config.blade.php',
 			'scaffold/config' => 'Config/config.php',
 			'scaffold/helper' => 'Support/helper.php',
 			'assets/js/app'   => 'Resources/assets/js/app.js',

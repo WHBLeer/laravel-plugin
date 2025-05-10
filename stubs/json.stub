@@ -17,6 +17,6 @@
     "aliases": {},
     "files": [],
     "requires": {
-        "sanlilin/admin-plugins": "^1.3",
+        "sanlilin/admin-plugins": "^1.3"
     }
 }

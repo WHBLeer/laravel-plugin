@@ -14,6 +14,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Command as Console;
+use Sanlilin\LaravelPlugin\Support\Plugin;
 use Sanlilin\LaravelPlugin\Support\Config;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Foundation\Application;
@@ -49,6 +50,7 @@ class LaravelPluginController extends Controller
 		}
 		$status = $request->status??'all';
 		$collection = collect();
+		/** @var Plugin $plugin */
 		foreach ($data as $plugin) {
 			$logo_src = plugin_logo($plugin->getName());
 			$readme = $plugin->getPath().'/readme.md';
@@ -147,6 +149,7 @@ class LaravelPluginController extends Controller
 	 */
 	public function disable(Request $request)
 	{
+		/** @var Plugin $plugin */
 		$plugin = app('plugins.repository')->findOrFail($request->plugin);
 
 		if ($plugin->isEnabled()) {
@@ -171,6 +174,7 @@ class LaravelPluginController extends Controller
 	 */
 	public function enable(Request $request)
 	{
+		/** @var Plugin $plugin */
 		$plugin = app('plugins.repository')->findOrFail($request->plugin);
 
 		if ($plugin->isDisabled()) {
@@ -185,26 +189,24 @@ class LaravelPluginController extends Controller
 	/**
 	 * Setting the specified plugin.
 	 * 配置指定的插件。
-	 * @param Request $request
-	 * @return Factory|View|\Illuminate\Foundation\Application|JsonResponse|\Illuminate\Http\RedirectResponse|object
 	 *
+	 * @param Request $request
+	 *
+	 * @return JsonResponse
 	 * @author: hongbinwang
-	 * @time  : 2025/5/10 上午2:24
+	 * @time  : 2023/10/18 15:23
 	 */
 	public function setting(Request $request)
 	{
+		/** @var Plugin $plugin */
 		$plugin = app('plugins.repository')->findOrFail($request->plugin);
-		if ($request->ajax()) {
-			if ($plugin->setConfig($request->configs??[])) {
 
-				return $this->respond('success',"Plugin [{$plugin->getName()}] config set successful.");
-			} else {
-				return $this->respond('error',"Plugin [{$plugin->getName()}] config file not exist");
-			}
+		if ($plugin->setConfig($request->configs??[])) {
+
+			return $this->respond('success',"Plugin [{$plugin->getName()}] config set successful.");
+		} else {
+			return $this->respond('error',"Plugin [{$plugin->getName()}] config file not exist");
 		}
-		$configs = $plugin->config();
-
-		return view('laravel-plugin::setting',compact('plugin','configs'));
 	}
 
 	/**
@@ -221,6 +223,7 @@ class LaravelPluginController extends Controller
 	public function delete(Request $request)
 	{
 		try {
+			/** @var Plugin $plugin */
 			$plugin = app('plugins.repository')->findOrFail($request->plugin);
 
 			ComposerRemove::make()->appendRemovePluginRequires(
@@ -462,6 +465,7 @@ class LaravelPluginController extends Controller
 				return $this->respond('error',"Please authenticate using the 'login' command before proceeding.");
 			}
 
+			/** @var Plugin $plugin */
 			$plugin = app('plugins.repository')->findOrFail($request->plugin);
 
 			Log::info("Plugin {$plugin->getStudlyName()} starts to compress");

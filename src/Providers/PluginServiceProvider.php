@@ -175,7 +175,7 @@ class PluginServiceProvider extends ServiceProvider
 	        ], 'laravel-plugin-views');
 
 	        $this->publishes([
-		        __DIR__.'/../../resources/assets' => public_path('assets/vendor/laravel-plugin'),
+		        __DIR__.'/../../Resources/assets' => public_path('assets/vendor/laravel-plugin'),
 	        ], 'laravel-plugin-assets');
 
 	        $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang');
