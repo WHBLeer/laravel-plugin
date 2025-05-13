@@ -1,4 +1,4 @@
-<div class="col-md-6 col-lg-4 col-xxl-3">
+<div class="col-md-4 col-lg-3 col-xxl-2">
 	<div class="card blog-card overflow-hidden">
 		<a href="javascript:;" data-glightbox="type: image; zoomable: false;" class="plugin-detail" data-row="{{json_encode($plugin)}}">
 			<img src="{{$plugin['logo']}}" class="card-img-top" alt="...">
@@ -11,6 +11,9 @@
 			<a href="javascript:;" class="bloglink plugin-detail" data-row="{{json_encode($plugin)}}">
 				<h5 class="title-text mb-2">{{ $plugin['name'] }}</h5>
 			</a>
+			<p class="card-text text-secondary">
+				{{ $plugin['description'] }}
+			</p>
 			<div class="app-divider-v dashed py-3"></div>
 			<div class="d-flex justify-content-between align-items-center gap-2 position-relative">
 				<div class="h-40 w-40 d-flex-center b-r-10 overflow-hidden bg-primary position-absolute">

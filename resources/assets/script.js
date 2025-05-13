@@ -88,7 +88,7 @@ $(document).ready(function () {
 		
 		// 设置模态框内容
 		$('#pluginDetailName').text(pluginData.name);
-		$('#pluginDetailDesc').html(pluginData.description);
+		$('#pluginDetailDesc').html(pluginData.readme||pluginData.description);
 		$('#pluginDetailImage').attr('src', pluginData.logo);
 		
 		// 更新模态框标题（可选）
