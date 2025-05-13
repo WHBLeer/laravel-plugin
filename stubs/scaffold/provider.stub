@@ -29,6 +29,7 @@ class $CLASS$ extends ServiceProvider
         $this->registerViews();
 	    $this->registerHelper();
 	    $this->registerBlade();
+	    $this->registerAssets();
     }
 
     /**
@@ -111,6 +112,30 @@ class $CLASS$ extends ServiceProvider
 			// 可以在此处编辑插件标签
 			return url('/$LOWER_NAME$');
 		});
+	}
+
+	/**
+	 * Create symbolic link for plugin assets.
+	 *
+	 * @return void
+	 */
+	protected function registerAssets()
+	{
+		$pluginNameLower = $this->pluginNameLower;
+		$pluginAssetPath = plugin_path($this->pluginName, 'Resources/assets');
+		$publicAssetPath = public_path("assets/vendor/plugins/{$pluginNameLower}");
+
+		// 如果 public 路径已存在，先删除旧的
+		if (is_dir($publicAssetPath) && !is_link($publicAssetPath)) {
+			$this->app['files']->deleteDirectory($publicAssetPath);
+		} elseif (is_link($publicAssetPath)) {
+			unlink($publicAssetPath);
+		}
+
+		// 创建新软链接
+		if (is_dir($pluginAssetPath)) {
+			symlink($pluginAssetPath, $publicAssetPath);
+		}
 	}
 
     /**

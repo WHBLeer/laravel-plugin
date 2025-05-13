@@ -1,15 +1,15 @@
 {
     "name": "$STUDLY_NAME$",
     "alias": "$LOWER_NAME$",
-    "description": "",
+    "description": "仅适用于 ENewShop 的 $STUDLY_NAME$ 插件",
     "logo": "logo.png",
     "version": "1.0.0",
-    "keywords": ["UhaveShop插件","$STUDLY_NAME$"],
-    "author": {
-        "name": "your name",
-        "email": "your email",
-        "home": "https://www.your_home.com"
-    },
+    "keywords": ["ENewShop插件","$STUDLY_NAME$"],
+        "author": {
+            "name": "SanLiLin",
+            "email": "wanghongbin816@gmail.com",
+            "home": "https://www.your_home.com"
+        },
     "priority": 0,
     "providers": [
         "$PLUGIN_NAMESPACE$\\$STUDLY_NAME$\\$PROVIDER_NAMESPACE$\\$STUDLY_NAME$ServiceProvider"

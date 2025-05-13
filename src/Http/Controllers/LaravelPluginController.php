@@ -53,7 +53,12 @@ class LaravelPluginController extends Controller
 		$collection = collect();
 		/** @var Plugin $plugin */
 		foreach ($plugins as $plugin) {
-			$logo_src = plugin_logo($plugin->getStudlyName());
+			$logo = $plugin->getPath().'/Resources/assets'.$plugin->get('logo');
+			if(!file_exists($logo)){
+				$logo_src = asset('assets/vender/plugins/'.$plugin->getLowerName().'/'.$plugin->get('logo'));
+			} else {
+				$logo_src = plugin_logo($plugin->getStudlyName(),false);
+			}
 			$readme = $plugin->getPath().'/readme.md';
 			if(file_exists($readme)){
 				$readme_html = (string) Markdown::parse(file_get_contents($readme));

@@ -15,8 +15,8 @@ return [
 	|
 	*/
 	'permission' => [
-		'status' => true,
-		'file' =>  'permission.json',
-		'source_by' =>  'plugin_$LOWER_NAME$',
+		'status' 	=> true,
+		'file' 		=> 'permission.json',
+		'source_by' => 'plugin_$LOWER_NAME$',
 	],
 ];

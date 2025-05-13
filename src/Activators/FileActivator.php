@@ -154,6 +154,7 @@ class FileActivator implements ActivatorInterface
      */
     private function writeJson(): void
     {
+		$this->files->ensureDirectoryExists(dirname($this->statusesFile));
         $this->files->put($this->statusesFile, json_encode($this->pluginsStatuses, JSON_PRETTY_PRINT));
     }
 

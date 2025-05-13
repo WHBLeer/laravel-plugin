@@ -1,4 +1,4 @@
-@extends('$LOWER_NAME$::layouts.master')
+@extends('$STUDLY_NAME$::layouts.master')
 
 @section('content')
     <h1>Hello World</h1>
@@ -6,4 +6,28 @@
     <p>
         This view is loaded from plugin: {!! config('$LOWER_NAME$.name') !!}
     </p>
+@endsection
+
+
+@extends('layout.master')
+@section('title', '$STUDLY_NAME$ Management')
+@section('css')
+	<link rel="stylesheet" href="{{asset('assets/vendor/plugins/$LOWER_NAME$/style.css')}}">
+@endsection
+@section('main-content')
+	<div class="container-fluid">
+		<h1>Hello ENewShop</h1>
+		<p>
+			This view is loaded from plugin: {!! config('$LOWER_NAME$.name') !!}
+		</p>
+	</div>
+@endsection
+
+@section('script')
+	<!--customizer-->
+	<div id="customizer"></div>
+
+	<!--js-->
+	<script src="{{asset('assets/vendor/plugins/$LOWER_NAME$/script.js')}}"></script>
+
 @endsection

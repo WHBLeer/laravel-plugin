@@ -11,9 +11,9 @@
 			<div class="col-12">
 				<div class="tab-wrapper mb-3">
 					<ul class="tabs">
-						<li class="tab-link active" data-tab="1">All Plugin</li>
-						<li class="tab-link" data-tab="2">Enabled Plugin</li>
-						<li class="tab-link" data-tab="3">Disabled Plugin</li>
+						<li class="tab-link active" data-tab="all">All Plugin</li>
+						<li class="tab-link" data-tab="enabled">Enabled Plugin</li>
+						<li class="tab-link" data-tab="disabled">Disabled Plugin</li>
 						<li class="ms-auto">
 							<div class="text-end">
 								<button class="btn btn-primary w-45 h-45 icon-btn b-r-10 m-2" data-bs-toggle="modal" data-bs-target="#uploadPluginModal"><i class="ti ti-upload f-s-18"></i></button>
@@ -22,24 +22,28 @@
 					</ul>
 				</div>
 				<div class="content-wrapper" id="card-container">
-					<div id="tab-1" class="tabs-content active">
+					<div id="tab-all" class="tabs-content active">
 						<div class="row ">
-							@foreach($plugins as $plugin)
-								@include('plugins::partials.plugin-card', ['plugin' => $plugin])
+							@foreach($data as $plugin)
+								@include('plugins::partials.plugin-card', ['plugin' => $plugin, 'status' => 'all'])
 							@endforeach
 						</div>
 					</div>
-					<div id="tab-2" class="tabs-content">
+					<div id="tab-enabled" class="tabs-content">
 						<div class="row ">
-							@foreach($plugins as $plugin)
-								@include('plugins::partials.plugin-card', ['plugin' => $plugin])
+							@foreach($data as $plugin)
+								@if ($plugin['status'] == 'Enabled')
+									@include('plugins::partials.plugin-card', ['plugin' => $plugin, 'status' => 'Enabled'])
+								@endif
 							@endforeach
 						</div>
 					</div>
-					<div id="tab-3" class="tabs-content">
+					<div id="tab-disabled" class="tabs-content">
 						<div class="row ">
-							@foreach($plugins as $plugin)
-								@include('plugins::partials.plugin-card', ['plugin' => $plugin])
+							@foreach($data as $plugin)
+								@if ($plugin['status'] == 'Disabled')
+									@include('plugins::partials.plugin-card', ['plugin' => $plugin, 'status' => 'Disabled'])
+								@endif
 							@endforeach
 						</div>
 					</div>
@@ -49,26 +53,43 @@
 	</div>
 @endsection
 @section('modal')
+	<div class="modal fade" id="pluginDetailModal" tabindex="-1"
+		 aria-hidden="true">
+		<div class="modal-dialog app_modal_sm">
+			<div class="modal-content">
+				<div class="modal-header bg-primary-800">
+					<h1 class="modal-title fs-5 text-white" id="pluginDetailModalTitle">Small Modal</h1>
+					<button type="button" class="fs-5 border-0 bg-none  text-white" data-bs-dismiss="modal"
+							aria-label="Close"><i class="fa-solid fa-xmark fs-3"></i></button>
+				</div>
+				<div class="modal-body text-center">
+					<div class="d-flex gap-2">
+						<img src="" alt="" id="pluginDetailImage" class="rounded-pill object-fit-cover h-90 w-90 b-r-10">
+						<div class="text-start d-flex flex-column gap-2">
+							<h5 id="pluginDetailName"></h5>
+							<p id="pluginDetailDesc" class="m-0"></p>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="modal fade" id="uploadPluginModal" tabindex="-1" aria-labelledby="uploadPluginModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="uploadPluginModalLabel">Modal title</h1>
+					<h1 class="modal-title fs-5" id="uploadPluginModalLabel">Plugin ZIP File</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
+					<small class="form-text text-muted">Upload a valid plugin ZIP package</small>
 					<form class="app-form" id="upload-form" action="{{ route('admin.plugin.local') }}" method="POST" enctype="multipart/form-data">
 						@csrf
-						<div class="form-group">
-							<label for="pluginFile">Plugin ZIP File</label>
-							<input type="file" class="form-control-file" id="pluginFile" accept=".zip" name="plugin_zip" required>
-							<small class="form-text text-muted">Upload a valid plugin ZIP package</small>
-						</div>
-						<div class="form-check mb-3 d-flex gap-1">
-							<input class="form-check-input mg-2" type="checkbox" value="" name="enable" id="checkDefault">
-							<label class="form-check-label" for="checkDefault">
-								Enable
-							</label>
+						<div class="mb-3">
+							<input type="file" class="form-control file_upload" id="pluginFile" accept=".zip" name="plugin_zip" required>
 						</div>
 					</form>
 				</div>
@@ -90,5 +111,5 @@
 	
 	<!--js-->
 	<script src="{{asset('assets/vendor/plugins/script.js')}}"></script>
-	
+
 @endsection

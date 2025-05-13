@@ -1,46 +1,5 @@
 [
 	{
-		"name": "$UPPER_NAME$",
-		"route_name": null,
-		"icon": "icon-product",
-		"params": null,
-		"is_show": 1,
-		"is_menu": 2,
-		"children": [
-			{
-				"name": "$STUDLY_NAME$",
-				"route_name": null,
-				"icon": "icon-product",
-				"params": null,
-				"is_show": 1,
-				"is_menu": 1,
-				"children": [
-					{
-						"name": "$STUDLY_NAME$ List",
-						"route_name": "seller.$LOWER_NAME$",
-						"icon": "icon-product",
-						"params": null,
-						"is_show": 1,
-						"is_menu": 1
-					},
-					{
-						"name": "$STUDLY_NAME$ New",
-						"route_name": "seller.$LOWER_NAME$.create",
-						"icon": "icon-product",
-						"params": null,
-						"is_show": 1,
-						"is_menu": 1
-					},
-					···
-				]
-			}
-		]
-	}
-]
-
-
-[
-	{
 		"name": "$LOWER_NAME$",
 		"guard_name": "admin",
 		"display_name": "$STUDLY_NAME$",

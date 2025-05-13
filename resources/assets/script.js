@@ -38,6 +38,12 @@ function pluginActionHandler() {
 
 // 绑定事件
 $(document).ready(function () {
+	$('.tab-link').on('click',function () {
+		var tabID = $(this).attr('data-tab');
+		$(this).addClass('active').siblings().removeClass('active');
+		$('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+	});
+	
 	$('.enable-btn, .disable-btn, .restart-btn, .delete-btn').on('click', pluginActionHandler());
 	
 	// 处理插件上传安装逻辑
@@ -76,4 +82,20 @@ $(document).ready(function () {
 			}
 		});
 	});
+	
+	$('.plugin-detail').on('click', function () {
+		const pluginData = $(this).data('row');
+		
+		// 设置模态框内容
+		$('#pluginDetailName').text(pluginData.name);
+		$('#pluginDetailDesc').html(pluginData.description);
+		$('#pluginDetailImage').attr('src', pluginData.logo);
+		
+		// 更新模态框标题（可选）
+		$('#pluginDetailModalTitle').text(pluginData.name);
+		
+		// 显示模态框
+		$('#pluginDetailModal').modal('show');
+	});
+	
 });
