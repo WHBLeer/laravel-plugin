@@ -2,10 +2,7 @@
 
 namespace Sanlilin\LaravelPlugin\Providers;
 
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Sanlilin\LaravelPlugin\Providers\PermissionServiceProvider;
-use Sanlilin\LaravelPlugin\Providers\RouteServiceProvider;
 use Sanlilin\LaravelPlugin\Contracts\ActivatorInterface;
 use Sanlilin\LaravelPlugin\Contracts\ClientInterface;
 use Sanlilin\LaravelPlugin\Contracts\RepositoryInterface;
@@ -22,11 +19,6 @@ class PluginServiceProvider extends ServiceProvider
     {
         $this->registerPlugins();
         $this->registerPublishing();
-
-	    $show_in_menu = $this->app['config']->get('plugins.show_in_menu');
-	    if($show_in_menu){
-		    $this->app->register(PermissionServiceProvider::class);
-	    }
     }
 
     /**

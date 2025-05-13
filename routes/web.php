@@ -2,9 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Sanlilin\LaravelPlugin\Http\Controllers\LaravelPluginController;
-
-Route::prefix('admin')->as('admin.')->group (function () {
-
+Route::middleware(['auth:admin'])->prefix('admin')->as('admin.')->group(function () {
 	Route::get('/plugin',[LaravelPluginController::class,'index'])->name('plugin');
 
 	Route::prefix('plugin')->as('plugin.')->group (function () {
