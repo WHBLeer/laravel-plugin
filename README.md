@@ -35,7 +35,7 @@ composer require sanlilin/laravel-plugin:^4.0
 
 * Step 2
 ```php
-php artisan vendor:publish --provider="Sanlilin\LaravelPlugin\Providers\PluginServiceProvider"
+php artisan plugins-system:install"
 ```
 
 

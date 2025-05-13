@@ -19,6 +19,7 @@ class PluginServiceProvider extends ServiceProvider
     {
         $this->registerPlugins();
         $this->registerPublishing();
+	    $this->registerViews();
     }
 
     /**
@@ -122,27 +123,26 @@ class PluginServiceProvider extends ServiceProvider
 
     private function registerPublishing(): void
     {
+	    $sourceConfigPath = __DIR__.'/../../config/config.php';
+	    $sourceMigrationsPath = __DIR__.'/../../database/migrations';
+	    $sourceViewsPath = __DIR__.'/../../resources/views';
+	    $sourceAssetsPath = __DIR__.'/../../resources/assets';
+	    $sourceLangPath = __DIR__.'/../../resources/lang';
+	    $configPath = config_path('plugins.php');
+	    $migrationPath = base_path('database/migrations');
+	    $viewPath = resource_path('views/vendor/plugins');
+	    $assetPath = public_path('assets/vendor/plugins');
         if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../../config/config.php' => config_path('plugins.php'),
-            ], 'plugins-config');
+            $this->publishes([$sourceConfigPath => $configPath], 'plugins-config');
+	        $this->publishes([$sourceMigrationsPath => $migrationPath], 'plugins-migrations');
+	        $this->publishes([$sourceViewsPath => $viewPath,], 'plugins-views');
+	        $this->publishes([$sourceAssetsPath => $assetPath,], 'plugins-assets');
 
-	        $this->publishes([
-		        __DIR__.'/../../resources/views' => resource_path('views/vendor/plugins'),
-	        ], 'plugins-views');
-
-	        $this->publishes([
-		        __DIR__.'/../../resources/assets' => public_path('assets/vendor/plugins'),
-	        ], 'plugins-assets');
-
-	        $this->publishes([
-		        __DIR__.'/../../database/migrations' => base_path('database/migrations'),
-	        ], 'plugins-migrations');
-
-	        $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang');
-
-            // $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+	        $this->loadViewsFrom($sourceViewsPath,'plugins');
+	        $this->loadJsonTranslationsFrom($sourceLangPath);
+            $this->loadMigrationsFrom($sourceMigrationsPath);
 
         }
     }
+
 }
