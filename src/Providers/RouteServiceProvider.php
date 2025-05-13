@@ -2,6 +2,7 @@
 
 namespace Sanlilin\LaravelPlugin\Providers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -38,9 +39,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
+		Log::channel('plugin')->info('RouteServiceProvider:'.__DIR__.'/../../routes/web.php');
 	    Route::middleware('web')
-		    ->prefix('admin')
-		    ->as('admin.')
 		    ->group(__DIR__.'/../../routes/web.php');
     }
 
