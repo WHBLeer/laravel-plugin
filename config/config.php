@@ -7,17 +7,19 @@ return [
 	// 应用市场
 	'market' => [
 		// 应用市场 api 域名
-		'api_base' => 'https://developer.uhaveshop.com/plugin',
+		'api_base' => 'https://developer.sanlilin.cn/plugin',
 		// 应用市场默认调用的 client class
 		'default' => \Sanlilin\LaravelPlugin\Support\Client\Market::class,
 	],
 
-	'menusshow' => false,
+	'show_in_menu' => true,
+
 	'stubs' => [
 		'enabled' => false,
 		'files'   => [
 			'routes/web'      => 'Routes/web.php',
 			'routes/api'      => 'Routes/api.php',
+			'routes/admin'      => 'Routes/admin.php',
 			'views/index'     => 'Resources/views/index.blade.php',
 			'views/master'    => 'Resources/views/layouts/master.blade.php',
 			'scaffold/config' => 'Config/config.php',
@@ -27,14 +29,14 @@ return [
 			'assets/logo'     => 'Resources/assets/logo.png',
 			'assets/lang'     => 'Resources/lang/en.json',
 			'readme'          => 'readme.md',
-			'menu'            => 'menu.json',
+			'permission'      => 'permission.json',
 			'gitignore'       => '.gitignore',
 		],
 		'replacements' => [
 			'routes/web'      => ['LOWER_NAME', 'STUDLY_NAME'],
 			'routes/api'      => ['LOWER_NAME'],
 			'json'            => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'PROVIDER_NAMESPACE'],
-			'menu'            => ['LOWER_NAME', 'STUDLY_NAME', 'UPPER_NAME'],
+			'permission'      => ['LOWER_NAME', 'STUDLY_NAME', 'UPPER_NAME'],
 			'readme'          => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'PROVIDER_NAMESPACE'],
 			'assets/lang'     => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'PROVIDER_NAMESPACE'],
 			'views/index'     => ['LOWER_NAME'],

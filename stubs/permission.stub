@@ -1,0 +1,80 @@
+[
+	{
+		"name": "$UPPER_NAME$",
+		"route_name": null,
+		"icon": "icon-product",
+		"params": null,
+		"is_show": 1,
+		"is_menu": 2,
+		"children": [
+			{
+				"name": "$STUDLY_NAME$",
+				"route_name": null,
+				"icon": "icon-product",
+				"params": null,
+				"is_show": 1,
+				"is_menu": 1,
+				"children": [
+					{
+						"name": "$STUDLY_NAME$ List",
+						"route_name": "seller.$LOWER_NAME$",
+						"icon": "icon-product",
+						"params": null,
+						"is_show": 1,
+						"is_menu": 1
+					},
+					{
+						"name": "$STUDLY_NAME$ New",
+						"route_name": "seller.$LOWER_NAME$.create",
+						"icon": "icon-product",
+						"params": null,
+						"is_show": 1,
+						"is_menu": 1
+					},
+					···
+				]
+			}
+		]
+	}
+]
+
+
+[
+	{
+		"name": "$LOWER_NAME$",
+		"guard_name": "admin",
+		"display_name": "$STUDLY_NAME$",
+		"type": "node",
+		"is_menu": "yes",
+		"icon": "ph-duotone  ph-squares-four",
+		"children": [
+			{
+				"name": "$LOWER_NAME$.index",
+				"guard_name": "admin",
+				"display_name": "$STUDLY_NAME$管理",
+				"type": "button",
+				"is_menu": "no",
+				"icon": "ph-duotone  ph-squares-four",
+				"route": "admin.$LOWER_NAME$.index"
+			},
+			{
+				"name": "$LOWER_NAME$.create",
+				"guard_name": "admin",
+				"display_name": "$STUDLY_NAME$创建",
+				"type": "button",
+				"is_menu": "no",
+				"icon": "ph-duotone  ph-squares-four",
+				"route": "admin.$LOWER_NAME$.create"
+			},
+			{
+				"name": "$LOWER_NAME$.show",
+				"guard_name": "admin",
+				"display_name": "$STUDLY_NAME$预览",
+				"type": "button",
+				"is_menu": "no",
+				"icon": "ph-duotone  ph-squares-four",
+				"route": "admin.$LOWER_NAME$.show"
+			}
+		]
+	}
+]

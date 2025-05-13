@@ -1,0 +1,77 @@
+[
+	{
+		"name": "system",
+		"guard_name": "admin",
+		"display_name": "系统管理",
+		"type": "node",
+		"is_menu": "yes",
+		"icon": "fas fa-cog",
+		"children": [
+			{
+				"name": "plugins",
+				"guard_name": "admin",
+				"display_name": "插件",
+				"type": "link",
+				"is_menu": "yes",
+				"icon": "ph-duotone  ph-squares-four",
+				"route": "admin.plugins",
+				"children": [
+					{
+						"name": "plugins.disable",
+						"guard_name": "admin",
+						"display_name": "插件禁用",
+						"type": "button",
+						"is_menu": "no",
+						"icon": "ph-duotone  ph-squares-four",
+						"route": "admin.plugins.disable"
+					},
+					{
+						"name": "plugins.enable",
+						"guard_name": "admin",
+						"display_name": "插件启用",
+						"type": "button",
+						"is_menu": "no",
+						"icon": "ph-duotone  ph-squares-four",
+						"route": "admin.plugins.enable"
+					},
+					{
+						"name": "plugins.delete",
+						"guard_name": "admin",
+						"display_name": "插件删除",
+						"type": "button",
+						"is_menu": "no",
+						"icon": "ph-duotone  ph-squares-four",
+						"route": "admin.plugins.delete"
+					},
+					{
+						"name": "plugins.batch",
+						"guard_name": "admin",
+						"display_name": "批量处理",
+						"type": "button",
+						"is_menu": "no",
+						"icon": "ph-duotone  ph-squares-four",
+						"route": "admin.plugins.batch"
+					},
+					{
+						"name": "plugins.install",
+						"guard_name": "admin",
+						"display_name": "插件安装",
+						"type": "button",
+						"is_menu": "no",
+						"icon": "ph-duotone  ph-squares-four",
+						"route": "admin.plugins.install"
+					},
+					{
+						"name": "plugins.local",
+						"guard_name": "admin",
+						"display_name": "本地安装",
+						"type": "button",
+						"is_menu": "no",
+						"icon": "ph-duotone  ph-squares-four",
+						"route": "admin.plugins.local"
+					}
+				]
+			}
+		]
+	}
+]

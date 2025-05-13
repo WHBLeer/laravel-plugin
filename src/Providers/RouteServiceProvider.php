@@ -38,8 +38,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware('web')
-            ->group(__DIR__.'/../../routes/web.php');
+	    Route::middleware('web')
+		    ->prefix('admin')
+		    ->as('admin.')
+		    ->group(__DIR__.'/../../routes/web.php');
     }
 
 }

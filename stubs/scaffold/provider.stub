@@ -27,7 +27,6 @@ class $CLASS$ extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-	    $this->registerLink();
 	    $this->registerHelper();
 	    $this->registerBlade();
     }
@@ -85,25 +84,6 @@ class $CLASS$ extends ServiceProvider
         $jsonLang = plugin_path($this->pluginName, 'Resources/lang');
 		$this->loadJsonTranslationsFrom($jsonLang);
     }
-
-	/**
-	 * Register link.
-	 *
-     * @return void
-	 */
-	public function registerLink()
-	{
-		$linkPath = public_path('assets/plugin/' . $this->pluginNameLower);
-
-		$targetPath = plugin_path($this->pluginName, '$PATH_ASSETS$');
-
-		if (!file_exists($linkPath) || !is_link($linkPath)) {
-			if (is_link($linkPath)) {
-				$this->app->make('files')->delete($linkPath);
-			}
-			$this->app->make('files')->link($targetPath, $linkPath);
-		}
-	}
 
 	/**
 	 * Register helper.

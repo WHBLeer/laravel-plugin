@@ -22,11 +22,12 @@ use Sanlilin\LaravelPlugin\Console\Commands\PluginDeleteCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\PluginMakeCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\ProviderMakeCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\PublishCommand;
-use Sanlilin\LaravelPlugin\Console\Commands\ReloadCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\RestartCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\RegisterCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\RouteProviderMakeCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\SeedMakeCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\UploadCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\InstallPluginsSystemCommand;
 
 class ConsoleServiceProvider extends ServiceProvider
 {
@@ -43,6 +44,7 @@ class ConsoleServiceProvider extends ServiceProvider
      * @var array
      */
     protected array $commands = [
+	    InstallPluginsSystemCommand::class,
         PluginCommand::class,
         PluginMakeCommand::class,
         ProviderMakeCommand::class,
@@ -61,7 +63,7 @@ class ConsoleServiceProvider extends ServiceProvider
         PluginDeleteCommand::class,
         InstallCommand::class,
         PublishCommand::class,
-	    ReloadCommand::class,
+	    RestartCommand::class,
 	    RegisterCommand::class,
         LoginCommand::class,
         UploadCommand::class,

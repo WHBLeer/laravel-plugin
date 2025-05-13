@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\File;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Command as Console;
@@ -35,7 +36,7 @@ class LaravelPluginController extends Controller
 	 * @author: hongbinwang
 	 * @time  : 2023/10/18 15:23
 	 */
-	public function list(Request $request)
+	public function index(Request $request)
 	{
 		switch ($request->status) {
 			case 'enabled':
@@ -52,12 +53,7 @@ class LaravelPluginController extends Controller
 		$collection = collect();
 		/** @var Plugin $plugin */
 		foreach ($plugins as $plugin) {
-			$logo = $plugin->getPath().'/Resources/assets'.$plugin->get('logo');
-			if(!file_exists($logo)){
-				$logo_src = asset('assets/plugin/'.$plugin->getLowerName().'/'.$plugin->get('logo'));
-			} else {
-				$logo_src = default_img();
-			}
+			$logo_src = plugin_logo($plugin->getStudlyName());
 			$readme = $plugin->getPath().'/readme.md';
 			if(file_exists($readme)){
 				$readme_html = (string) Markdown::parse(file_get_contents($readme));
@@ -96,7 +92,7 @@ class LaravelPluginController extends Controller
 		$enabled = count(app('plugins.repository')->getByStatus(1));
 		$disabled = count(app('plugins.repository')->getByStatus(0));
 		$all = count(app('plugins.repository')->all());
-		return view('laravel-plugin::list',compact('data','status','enabled','disabled','all'));
+		return view('plugins::index',compact('data','status','enabled','disabled','all'));
 	}
 
 	/**
@@ -136,7 +132,7 @@ class LaravelPluginController extends Controller
 				$version['price'],
 			], data_get($plugin, 'versions'));
 		}
-		return view('laravel-plugin::market',compact('rows'));
+		return view('plugins::market',compact('rows'));
 	}
 
 	/**
@@ -158,9 +154,9 @@ class LaravelPluginController extends Controller
 		if ($plugin->isEnabled()) {
 			$plugin->disable();
 
-			return $this->jsonSuccess("Plugin [{$plugin}] disabled successful.");
+			return $this->respond('success', "Plugin [{$plugin}] disabled successful.");
 		} else {
-			return $this->jsonSuccess("Plugin [{$plugin}] has already disabled.");
+			return $this->respond('success', "Plugin [{$plugin}] has already disabled.");
 		}
 	}
 
@@ -183,10 +179,28 @@ class LaravelPluginController extends Controller
 		if ($plugin->isDisabled()) {
 			$plugin->enable();
 
-			return $this->jsonSuccess("Plugin [{$plugin}] enabled successful.");
+			return $this->respond('success', "Plugin [{$plugin}] enabled successful.");
 		} else {
-			return $this->jsonSuccess("Plugin [{$plugin}] has already enabled.");
+			return $this->respond('success', "Plugin [{$plugin}] has already enabled.");
 		}
+	}
+
+	/**
+	 * @param Request $request
+	 * @return JsonResponse|\Illuminate\Http\RedirectResponse
+	 *
+	 * @author: hongbinwang
+	 * @time  : 2025/5/13 下午8:39
+	 */
+	public function restart(Request $request)
+	{
+		/** @var Plugin $plugin */
+		$plugin = app('plugins.repository')->findOrFail($request->plugin);
+		if ($plugin->isEnabled()) {
+			$plugin->disable();
+		}
+		$plugin->enable();
+		return $this->respond('success', "Plugin [{$plugin}] restarted successful.");
 	}
 
 	/**
@@ -213,38 +227,9 @@ class LaravelPluginController extends Controller
 
 			$plugin->delete();
 
-			return $this->jsonSuccess("Plugin {$request->plugin} has been deleted.");
+			return $this->respond('success', "Plugin {$request->plugin} has been deleted.");
 		} catch (\Exception $exception) {
-			return $this->jsonError($exception->getMessage());
-		}
-	}
-
-	/**
-	 * 批量处理插件
-	 *
-	 * @param Request $request
-	 *
-	 * @return JsonResponse
-	 * @author: hongbinwang
-	 * @time  : 2023/10/18 15:23
-	 */
-	public function batch(Request $request)
-	{
-		dd($request->all());
-		try {
-			/** @var Plugin $plugin */
-			$plugin = app('plugins.repository')->findOrFail($request->plugin);
-
-			ComposerRemove::make()->appendRemovePluginRequires(
-				$plugin->getStudlyName(),
-				$plugin->getAllComposerRequires()
-			)->run();
-
-			$plugin->delete();
-
-			return $this->jsonSuccess("Plugin {$request->plugin} has been deleted.");
-		} catch (\Exception $exception) {
-			return $this->jsonError($exception->getMessage());
+			return $this->respond('error', $exception->getMessage());
 		}
 	}
 
@@ -274,7 +259,121 @@ class LaravelPluginController extends Controller
 
 			return $code;
 		} catch (\Exception $exception) {
-			return $this->jsonError($exception->getMessage());
+			return $this->respond('error', $exception->getMessage());
+		}
+	}
+
+	/**
+	 * 本地上传插件安装包.zip进行安装
+	 * @param Request $request
+	 * @return JsonResponse|\Illuminate\Http\RedirectResponse
+	 *
+	 * @author: hongbinwang
+	 * @time  : 2025/5/13 下午8:34
+	 */
+	public function local(Request $request)
+	{
+		try {
+			$request->validate([
+				'plugin_zip' => 'required|file|mimes:zip|max:102400' // 限制100MB
+			]);
+
+			if (!File::exists(storage_path('app/plugins/temp'))) {
+				File::makeDirectory(storage_path('app/plugins/temp'));
+			}
+			$tempZipPath = $request->file('plugin_zip')->storeAs(
+				'plugins/temp',
+				Str::uuid().'.zip',
+				'local'
+			);
+
+			$extractPath = storage_path('app/plugins/temp/' . Str::uuid());
+			$zip = new \ZipArchive;
+
+			if ($zip->open(storage_path('app/' . $tempZipPath))) {
+				$zip->extractTo($extractPath);
+				$zip->close();
+			} else {
+				throw new \Exception("Failed to open ZIP file");
+			}
+
+			$pluginJsonPath = $extractPath . '/plugin.json';
+			if (!file_exists($pluginJsonPath)) {
+				throw new \Exception("plugin.json not found in root directory");
+			}
+
+			$pluginConfig = json_decode(file_get_contents($pluginJsonPath), true);
+			$requiredKeys = ['name', 'alias', 'version', 'providers', 'author'];
+
+			foreach ($requiredKeys as $key) {
+				if (!array_key_exists($key, $pluginConfig)) {
+					throw new \Exception("plugin.json missing required key: $key");
+				}
+			}
+
+			$code = LocalInstallGenerator::make()
+				->setLocalPath($extractPath)
+				->setFilesystem(app('files'))
+				->setPluginRepository(app('plugins.repository'))
+				->setActivator(app(ActivatorInterface::class))
+				->setActive(false)
+				->setConsole(new Console())
+				->generate();
+
+			// 7. 清理临时文件
+			app('files')->delete(storage_path('app/' . $tempZipPath));
+			app('files')->deleteDirectory($extractPath);
+
+			return $this->respond('success', "Plugin installed successfully");
+
+		} catch (\Exception $e) {
+			// 错误时清理残留文件
+			isset($tempZipPath) && app('files')->delete(storage_path('app/' . $tempZipPath));
+			isset($extractPath) && app('files')->deleteDirectory($extractPath);
+
+			return $this->respond('error', "Installation failed: " . $e->getMessage());
+		}
+	}
+
+	/**
+	 * @param Request $request
+	 * @return JsonResponse|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+	 *
+	 * @author: hongbinwang
+	 * @time  : 2025/5/13 下午10:05
+	 */
+	public function pack_up(Request $request)
+	{
+		try {
+			$pluginName = $request->plugin;
+
+			/** @var Plugin $plugin */
+			$plugin = app('plugins.repository')->findOrFail($pluginName);
+
+			Log::channel('plugin')->info("开始打包插件: {$plugin->getStudlyName()}");
+
+			// 使用压缩处理器
+			$compressHandler = new CompressPlugin($plugin);
+			if (!$compressHandler->handle()) {
+				throw new \Exception("插件压缩失败");
+			}
+
+			$zipPath = $plugin->getCompressFilePath();
+
+			// 设置下载文件名
+			$downloadName = sprintf('%s-v%s.zip',
+				$plugin->getLowerName(),
+				$plugin->get('version')
+			);
+
+			// 返回文件下载响应
+			return response()
+				->download($zipPath, $downloadName)
+				->deleteFileAfterSend(true);
+
+		} catch (\Exception $e) {
+			Log::channel('plugin')->error("插件打包失败: " . $e->getMessage());
+			return $this->respond('error', $e->getMessage(), [], 500);
 		}
 	}
 
@@ -297,7 +396,7 @@ class LaravelPluginController extends Controller
 			->setConsole(new Console())
 			->publish();
 
-		return $this->jsonSuccess("Plugin {$plugin->getStudlyName()} published successfully");
+		return $this->respond('success', "Plugin {$plugin->getStudlyName()} published successfully");
 	}
 
 	/**
@@ -318,7 +417,7 @@ class LaravelPluginController extends Controller
 			$account = $request->account;
 			$password = $request->password;
 			if (Str::length($password) < 8) {
-				return $this->jsonError('The password must be at least 8 characters.');
+				return $this->respond('error', 'The password must be at least 8 characters.');
 			}
 
 			$result = app('plugins.client')->register(
@@ -331,9 +430,9 @@ class LaravelPluginController extends Controller
 			$token = data_get($result, 'token');
 			Config::set('token', $token);
 
-			return $this->jsonSuccess('Authenticated successfully.'.PHP_EOL);
+			return $this->respond('success', 'Authenticated successfully.'.PHP_EOL);
 		} catch (\Exception $exception) {
-			return $this->jsonError($exception->getMessage());
+			return $this->respond('error', $exception->getMessage());
 		}
 	}
 
@@ -358,9 +457,9 @@ class LaravelPluginController extends Controller
 			$token = data_get($result, 'token');
 			Config::set('token', $token);
 
-			return $this->jsonSuccess('Authenticated successfully.'.PHP_EOL);
+			return $this->respond('success', 'Authenticated successfully.'.PHP_EOL);
 		} catch (\Exception $exception) {
-			return $this->jsonError($exception->getMessage());
+			return $this->respond('error', $exception->getMessage());
 		}
 	}
 
@@ -380,18 +479,18 @@ class LaravelPluginController extends Controller
 	{
 		try {
 			if (! Config::get('token')) {
-				return $this->jsonError("Please authenticate using the 'login' command before proceeding.");
+				return $this->respond('error', "Please authenticate using the 'login' command before proceeding.");
 			}
 
 			/** @var Plugin $plugin */
 			$plugin = app('plugins.repository')->findOrFail($request->plugin);
 
-			Log::info("Plugin {$plugin->getStudlyName()} starts to compress");
+			Log::channel('plugins')->info("Plugin {$plugin->getStudlyName()} starts to compress");
 
 			if (! (new CompressPlugin($plugin))->handle()) {
-				return $this->jsonError("Plugin {$plugin->getStudlyName()} compression Failed");
+				return $this->respond('error', "Plugin {$plugin->getStudlyName()} compression Failed");
 			}
-			Log::info("Plugin {$plugin->getStudlyName()} compression completed");
+			Log::channel('plugins')->info("Plugin {$plugin->getStudlyName()} compression completed");
 
 			$compressPath = $plugin->getCompressFilePath();
 
@@ -404,7 +503,7 @@ class LaravelPluginController extends Controller
 					'progress' => 0,
 				]);
 			} catch (\Exception $exception) {
-				return $this->jsonError('Plugin upload failed : '.$exception->getMessage());
+				return $this->respond('error', 'Plugin upload failed : '.$exception->getMessage());
 			}
 
 			app('files')->delete($compressPath);
@@ -412,9 +511,9 @@ class LaravelPluginController extends Controller
 			if (is_resource($stream)) {
 				fclose($stream);
 			}
-			return $this->jsonSuccess('Plugin upload completed');
+			return $this->respond('success', 'Plugin upload completed');
 		} catch (\Mockery\Exception $exception) {
-			return $this->jsonError($exception->getMessage());
+			return $this->respond('error', $exception->getMessage());
 		}
 	}
 
@@ -434,13 +533,13 @@ class LaravelPluginController extends Controller
 		$path = Str::uuid().'.zip';
 		try {
 			if (! Config::get('token')) {
-				return $this->jsonError("Please authenticate using the 'login' command before proceeding.");
+				return $this->respond('error', "Please authenticate using the 'login' command before proceeding.");
 			}
 			$plugins = data_get(app('plugins.client')->plugins(1), 'data');
 			$sn = $request->input_sn;
 
 			if (! $plugin = data_get($plugins, $sn)) {
-				return $this->jsonError(__("The plugin number: {$sn} does not exist"));
+				return $this->respond('error', __("The plugin number: {$sn} does not exist"));
 			}
 
 			array_map(fn ($version) => [
@@ -455,7 +554,7 @@ class LaravelPluginController extends Controller
 			$versionId = $request->input_version_id;
 
 			if (! in_array($versionId, Arr::pluck($plugin['versions'], 'id'))) {
-				return $this->jsonError(__("The plugin version: {$versionId} does not exist"));
+				return $this->respond('error', __("The plugin version: {$versionId} does not exist"));
 			}
 
 			Storage::put($path, app('plugins.client')->download($versionId));
@@ -470,12 +569,12 @@ class LaravelPluginController extends Controller
 					->setConsole(new Console())
 					->generate();
 
-				return $this->jsonError(__('Plugin downloaded successfully'));
+				return $this->respond('success', __('Plugin downloaded successfully'));
 			} catch (\Exception $exception) {
-				return $this->jsonError($exception->getMessage());
+				return $this->respond('error', $exception->getMessage());
 			}
 		} catch (\Exception $exception) {
-			return $this->jsonError($exception->getMessage());
+			return $this->respond('error', $exception->getMessage());
 		} finally {
 			Storage::delete($path);
 		}
@@ -497,13 +596,13 @@ class LaravelPluginController extends Controller
 		$path = Str::uuid().'.zip';
 		try {
 			if (! Config::get('token')) {
-				return $this->jsonError("Please authenticate using the 'login' command before proceeding.");
+				return $this->respond('error', "Please authenticate using the 'login' command before proceeding.");
 			}
 			$plugins = data_get(app('plugins.client')->plugins(1), 'data');
 			$sn = $request->input_sn;
 
 			if (! $plugin = data_get($plugins, $sn)) {
-				return $this->jsonError(__("The plugin number: {$sn} does not exist"));
+				return $this->respond('error', __("The plugin number: {$sn} does not exist"));
 			}
 
 			array_map(fn ($version) => [
@@ -518,7 +617,7 @@ class LaravelPluginController extends Controller
 			$versionId = $request->input_version_id;
 
 			if (! in_array($versionId, Arr::pluck($plugin['versions'], 'id'))) {
-				return $this->jsonError(__("The plugin version: {$versionId} does not exist"));
+				return $this->respond('error', __("The plugin version: {$versionId} does not exist"));
 			}
 
 			Storage::put($path, app('plugins.client')->download($versionId));
@@ -533,14 +632,60 @@ class LaravelPluginController extends Controller
 					->setConsole(new Console())
 					->generate();
 
-				return $this->jsonError(__('Plugin downloaded successfully'));
+				return $this->respond('success', __('Plugin downloaded successfully'));
 			} catch (\Exception $exception) {
-				return $this->jsonError($exception->getMessage());
+				return $this->respond('error', $exception->getMessage());
 			}
 		} catch (\Exception $exception) {
-			return $this->jsonError($exception->getMessage());
+			return $this->respond('error', $exception->getMessage());
 		} finally {
 			Storage::delete($path);
 		}
 	}
+
+
+	/**
+	 * 批量处理插件（启用、禁用、删除、发布）
+	 * @param Request $request
+	 * @return JsonResponse|\Illuminate\Http\RedirectResponse
+	 *
+	 * @author: hongbinwang
+	 * @time  : 2025/5/13 下午8:28
+	 */
+	public function batch(Request $request)
+	{
+		$plugins = explode(',', $request->input('plugins'));
+		$operation = $request->input('operation');
+
+		// 支持的操作类型映射到对应方法
+		$allowedOperations = [
+			'enable' => 'enable',
+			'disable' => 'disable',
+			'restart' => 'restart',
+			'delete' => 'delete',
+			'publish' => 'publish',
+		];
+
+		if (!array_key_exists($operation, $allowedOperations)) {
+			return $this->respond('error', 'Unsupported operation');
+		}
+
+		$results = [];
+		foreach ($plugins as $pluginName) {
+			// 调用对应的控制器方法
+			$method = $allowedOperations[$operation];
+			$response = $this->{$method}(new Request(['plugin' => $pluginName]));
+
+			// 解析响应结果
+			$responseData = json_decode($response->getContent(), true);
+			$results[] = [
+				'plugin' => $pluginName,
+				'status' => $responseData['status'],
+				'message' => $responseData['message'] ?? null,
+			];
+		}
+
+		return $this->respond('success', "Batch operation '{$operation}' completed successfully.", ['results' => $results]);
+	}
+
 }

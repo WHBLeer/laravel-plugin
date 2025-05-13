@@ -4,7 +4,7 @@ namespace Sanlilin\LaravelPlugin\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Sanlilin\LaravelPlugin\Providers\MenuServiceProvider;
+use Sanlilin\LaravelPlugin\Providers\PermissionServiceProvider;
 use Sanlilin\LaravelPlugin\Providers\RouteServiceProvider;
 use Sanlilin\LaravelPlugin\Contracts\ActivatorInterface;
 use Sanlilin\LaravelPlugin\Contracts\ClientInterface;
@@ -22,11 +22,10 @@ class PluginServiceProvider extends ServiceProvider
     {
         $this->registerPlugins();
         $this->registerPublishing();
-	    $this->registerViews();
 
-	    $menusshow = $this->app['config']->get('plugins.menusshow');
-	    if($menusshow){
-		    $this->app->register(MenuServiceProvider::class);
+	    $show_in_menu = $this->app['config']->get('plugins.show_in_menu');
+	    if($show_in_menu){
+		    $this->app->register(PermissionServiceProvider::class);
 	    }
     }
 
@@ -40,7 +39,6 @@ class PluginServiceProvider extends ServiceProvider
         $this->registerServices();
         $this->setupStubPath();
         $this->registerProviders();
-		$this->registerBlade();
 	    $this->app->register(RouteServiceProvider::class);
 	    
     }
@@ -120,57 +118,6 @@ class PluginServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
     }
 
-	/**
-	 * Register views.
-	 *
-	 * @return void
-	 */
-	public function registerViews()
-	{
-		$sourcePath = __DIR__.'/../../resources/views';
-		$this->loadViewsFrom($sourcePath,'laravel-plugin');
-
-		if ($this->app->runningInConsole()) {
-			$viewPath = resource_path('views/vendor/laravel-plugin');
-
-			$this->publishes([
-				$sourcePath => $viewPath
-			], 'laravel-plugin-views');
-		}
-	}
-	
-	/**
-	 * Register blade.
-	 *
-	 * @return void
-	 */
-	public function registerBlade()
-	{
-		Blade::if('plugin', function ($expression) {
-			$plugin = $this->app['plugins.repository']->findOrFail($expression);
-			return $plugin && $plugin->isEnabled();
-		});
-
-	}
-
-	/**
-	 * Register link.
-	 *
-	 * @return void
-	 */
-	public function registerLink()
-	{
-		$linkPath = public_path('assets/plugin/' . $this->pluginNameLower);
-		$targetPath = plugin_path($this->pluginName, 'Resources/assets');
-
-		if (!file_exists($linkPath) || !is_link($linkPath)) {
-			if (is_link($linkPath)) {
-				$this->app->make('files')->delete($linkPath);
-			}
-			$this->app->make('files')->link($targetPath, $linkPath);
-		}
-	}
-
     /**
      * Get the services provided by the provider.
      *
@@ -186,11 +133,23 @@ class PluginServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../../config/config.php' => config_path('plugins.php'),
-            ], 'laravel-plugin-config');
+            ], 'plugins-config');
+
+	        $this->publishes([
+		        __DIR__.'/../../resources/views' => resource_path('views/vendor/plugins'),
+	        ], 'plugins-views');
+
+	        $this->publishes([
+		        __DIR__.'/../../resources/assets' => public_path('assets/vendor/plugins'),
+	        ], 'plugins-assets');
+
+	        $this->publishes([
+		        __DIR__.'/../../database/migrations' => base_path('database/migrations'),
+	        ], 'plugins-migrations');
 
 	        $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang');
 
-            $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+            // $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
 
         }
     }

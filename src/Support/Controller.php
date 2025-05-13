@@ -18,66 +18,30 @@ class Controller extends BaseController
 	{
 	}
 
-	/**
-	 * 自定义信息返回
-	 * @param     $message
-	 * @param int $code
-	 * @return JsonResponse
-	 *
-	 * @author: hongbinwang
-	 * @time  : 2023/8/21 17:41
-	 */
-	public function json($message, int $code=0): JsonResponse
+	public function respond($type = 'success', $message = null, $data = null)
 	{
-		return response()->json([
-			'code' => $code,
-			'message' => $message,
-		]);
-	}
+		Session::flash('json-'.$type, $message);
+		if (request()->ajax() || request()->wantsJson()) {
+			$response = [];
 
-	/**
-	 * 自定义错误信息返回
-	 * @param $message
-	 * @return JsonResponse
-	 *
-	 * @author: hongbinwang
-	 * @time: 2023/8/21 17:41
-	 */
-	public function jsonError($message): JsonResponse
-	{
-		Session::flash('json-error', $message);
-		$error['errors']['error'] = $message;
-		return response()->json($error, 421);
-	}
+			if ($type === 'success') {
+				$response['status'] = 'success';
+				$response['message'] = $message ?? 'Operation successful.';
+				if ($data !== null) {
+					$response['data'] = $data;
+				}
+			} elseif ($type === 'error') {
+				$response['status'] = 'error';
+				$response['message'] = $message ?? 'An error occurred.';
+			}
 
-	/**
-	 * 自定义成功信息返回
-	 * @param $message
-	 * @return JsonResponse
-	 *
-	 * @author: hongbinwang
-	 * @time: 2023/8/21 17:41
-	 */
-	public function jsonSuccess($message): JsonResponse
-	{
-		Session::flash('json-success', $message);
-		return response()->json($message);
-	}
-
-	/**
-	 * 通用方法：在保存模型时进行异常捕获
-	 * @param $model
-	 * @return string
-	 *
-	 * @author: hongbinwang
-	 * @time  : 2023/11/10 18:06
-	 */
-	public function modelSave($model): string
-	{
-		try {
-			return $model->save();
-		} catch (\Exception $e) {
-			return __('Error saving model:') . $e->getMessage();
+			return response()->json($response);
 		}
+
+		if ($type === 'success') {
+			return redirect()->back()->with('success', $message);
+		}
+
+		return redirect()->back()->with('error', $message);
 	}
 }
