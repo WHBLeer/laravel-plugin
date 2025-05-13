@@ -15,10 +15,14 @@ Laravel Plugin是一个插件机制解决方案，为需要建立自己的生态
 ## 适用环境
 
 ```yml
-"php": "^7.3|^8.0",
+"php": "^8.2",
 "ext-zip": "*",
-"laravel/framework": "^8.12",
-"spatie/laravel-enum": "^2.5"
+"ext-json": "*",
+"laravel/framework": "^11.0",
+"artesaos/seotools": "^1.3",
+"mcamara/laravel-localization": "^2.0",
+"illuminate/config": "^10.0 || ^11.0 || ^12.0",
+"illuminate/support": "^10.0 || ^11.0 || ^12.0"
 ```
 
 
@@ -26,7 +30,7 @@ Laravel Plugin是一个插件机制解决方案，为需要建立自己的生态
 
 * Step 1
 ```shell
-composer require sanlilin/laravel-plugin
+composer require sanlilin/laravel-plugin:^4.0
 ```
 
 * Step 2
