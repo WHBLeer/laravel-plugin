@@ -112,7 +112,7 @@ return [
 	'activators' => [
 		'file' => [
 			'class'          => \Sanlilin\LaravelPlugin\Activators\FileActivator::class,
-			'statuses-file'  => base_path('plugin_statuses.json'),
+			'statuses-file'  => base_path('plugins/status.json'),
 			'cache-key'      => 'activator.installed',
 			'cache-lifetime' => 604800,
 		],
