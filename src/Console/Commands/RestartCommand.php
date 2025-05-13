@@ -131,7 +131,7 @@ class RestartCommand extends Command
 				 * "type": "button",
 				 * "is_menu": "no",
 				 * "icon": "ph-duotone  ph-squares-four",
-				 * "route": "admin.plugins.local"
+				 * "route": "admin.plugin.local"
 				 */
 				$permission = new Permission();
 				$permission->parent_id    = $parent ? $parent->id : null;

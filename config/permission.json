@@ -14,7 +14,7 @@
 				"type": "link",
 				"is_menu": "yes",
 				"icon": "ph-duotone  ph-squares-four",
-				"route": "admin.plugins",
+				"route": "admin.plugin",
 				"children": [
 					{
 						"name": "plugins.disable",
@@ -23,7 +23,7 @@
 						"type": "button",
 						"is_menu": "no",
 						"icon": "ph-duotone  ph-squares-four",
-						"route": "admin.plugins.disable"
+						"route": "admin.plugin.disable"
 					},
 					{
 						"name": "plugins.enable",
@@ -32,7 +32,7 @@
 						"type": "button",
 						"is_menu": "no",
 						"icon": "ph-duotone  ph-squares-four",
-						"route": "admin.plugins.enable"
+						"route": "admin.plugin.enable"
 					},
 					{
 						"name": "plugins.delete",
@@ -41,7 +41,7 @@
 						"type": "button",
 						"is_menu": "no",
 						"icon": "ph-duotone  ph-squares-four",
-						"route": "admin.plugins.delete"
+						"route": "admin.plugin.delete"
 					},
 					{
 						"name": "plugins.batch",
@@ -50,7 +50,7 @@
 						"type": "button",
 						"is_menu": "no",
 						"icon": "ph-duotone  ph-squares-four",
-						"route": "admin.plugins.batch"
+						"route": "admin.plugin.batch"
 					},
 					{
 						"name": "plugins.install",
@@ -59,7 +59,7 @@
 						"type": "button",
 						"is_menu": "no",
 						"icon": "ph-duotone  ph-squares-four",
-						"route": "admin.plugins.install"
+						"route": "admin.plugin.install"
 					},
 					{
 						"name": "plugins.local",
@@ -68,7 +68,7 @@
 						"type": "button",
 						"is_menu": "no",
 						"icon": "ph-duotone  ph-squares-four",
-						"route": "admin.plugins.local"
+						"route": "admin.plugin.local"
 					}
 				]
 			}
