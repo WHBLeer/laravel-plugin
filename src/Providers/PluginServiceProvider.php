@@ -19,7 +19,6 @@ class PluginServiceProvider extends ServiceProvider
     {
         $this->registerPlugins();
         $this->registerPublishing();
-	    $this->registerViews();
     }
 
     /**
@@ -132,16 +131,16 @@ class PluginServiceProvider extends ServiceProvider
 	    $migrationPath = base_path('database/migrations');
 	    $viewPath = resource_path('views/vendor/plugins');
 	    $assetPath = public_path('assets/vendor/plugins');
+	    $this->loadViewsFrom($sourceViewsPath,'plugins');
+	    $this->loadJsonTranslationsFrom($sourceLangPath);
+	    $this->loadMigrationsFrom($sourceMigrationsPath);
+
+		// 资源文件发布到应用
         if ($this->app->runningInConsole()) {
             $this->publishes([$sourceConfigPath => $configPath], 'plugins-config');
 	        $this->publishes([$sourceMigrationsPath => $migrationPath], 'plugins-migrations');
 	        $this->publishes([$sourceViewsPath => $viewPath,], 'plugins-views');
 	        $this->publishes([$sourceAssetsPath => $assetPath,], 'plugins-assets');
-
-	        $this->loadViewsFrom($sourceViewsPath,'plugins');
-	        $this->loadJsonTranslationsFrom($sourceLangPath);
-            $this->loadMigrationsFrom($sourceMigrationsPath);
-
         }
     }
 
