@@ -55,7 +55,7 @@ class LaravelPluginController extends Controller
 		foreach ($plugins as $plugin) {
 			$logo = $plugin->getPath().'/Resources/assets'.$plugin->get('logo');
 			if(!file_exists($logo)){
-				$logo_src = asset('assets/vender/plugins/'.$plugin->getLowerName().'/'.$plugin->get('logo'));
+				$logo_src = asset('assets/vendor/plugins/'.$plugin->getLowerName().'/'.$plugin->get('logo'));
 			} else {
 				$logo_src = plugin_logo($plugin->getStudlyName(),false);
 			}

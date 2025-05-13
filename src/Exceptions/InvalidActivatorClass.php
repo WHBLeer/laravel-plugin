@@ -8,4 +8,9 @@ class InvalidActivatorClass extends \Exception
     {
         return new static("You don't have a valid activator configuration class. This might be due to your config being out of date. \n Run php artisan vendor:publish --provider=\"Sanlilin\LaravelPlugin\Providers\PluginServiceProvider\" --force to publish the up to date configuration");
     }
+
+	public static function errorPermission($path,  $error): InvalidActivatorClass
+	{
+		return new static("Permission Settings failed. Please check the file permissions. path: {$path}, error message: {$error}. \n Run chmod -R 755 {$path} && chown -R www. {$path} to setting permission");
+	}
 }

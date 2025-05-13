@@ -64,15 +64,11 @@ class $CLASS$ extends ServiceProvider
      */
     public function registerViews()
     {
-        $viewPath = resource_path('views/plugins/' . $this->pluginNameLower);
+    	$sourcePath = plugin_path($this->pluginName, '$PATH_VIEWS$');
+    	$this->loadViewsFrom($sourcePath,$this->pluginNameLower);
 
-        $sourcePath = plugin_path($this->pluginName, '$PATH_VIEWS$');
-
-        $this->publishes([
-            $sourcePath => $viewPath
-        ], ['views', $this->pluginNameLower . '-plugin-views']);
-
-        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->pluginNameLower);
+        /*$this->publishes([$sourcePath => $viewPath], ['views', $this->pluginNameLower . '-plugin-views']);
+        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->pluginNameLower);*/
     }
 
     /**
