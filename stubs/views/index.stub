@@ -1,14 +1,3 @@
-@extends('$STUDLY_NAME$::layouts.master')
-
-@section('content')
-    <h1>Hello World</h1>
-
-    <p>
-        This view is loaded from plugin: {!! config('$LOWER_NAME$.name') !!}
-    </p>
-@endsection
-
-
 @extends('layout.master')
 @section('title', '$STUDLY_NAME$ Management')
 @section('css')

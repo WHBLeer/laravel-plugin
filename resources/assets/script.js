@@ -85,16 +85,8 @@ $(document).ready(function () {
 	
 	$('.plugin-detail').on('click', function () {
 		const pluginData = $(this).data('row');
-		
-		// 设置模态框内容
-		$('#pluginDetailName').text(pluginData.name);
 		$('#pluginDetailDesc').html(pluginData.readme||pluginData.description);
-		$('#pluginDetailImage').attr('src', pluginData.logo);
-		
-		// 更新模态框标题（可选）
 		$('#pluginDetailModalTitle').text(pluginData.name);
-		
-		// 显示模态框
 		$('#pluginDetailModal').modal('show');
 	});
 	

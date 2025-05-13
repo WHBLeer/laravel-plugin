@@ -55,21 +55,14 @@
 @section('modal')
 	<div class="modal fade" id="pluginDetailModal" tabindex="-1"
 		 aria-hidden="true">
-		<div class="modal-dialog app_modal_sm">
+		<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header bg-primary-800">
 					<h1 class="modal-title fs-5 text-white" id="pluginDetailModalTitle">Small Modal</h1>
 					<button type="button" class="fs-5 border-0 bg-none  text-white" data-bs-dismiss="modal"
 							aria-label="Close"><i class="fa-solid fa-xmark fs-3"></i></button>
 				</div>
-				<div class="modal-body text-center">
-					<div class="d-flex gap-2">
-						<img src="" alt="" id="pluginDetailImage" class="rounded-pill object-fit-cover h-90 w-90 b-r-10">
-						<div class="text-start d-flex flex-column gap-2">
-							<h5 id="pluginDetailName"></h5>
-							<p id="pluginDetailDesc" class="m-0"></p>
-						</div>
-					</div>
+				<div class="modal-body h-500" id="pluginDetailDesc">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Close</button>
