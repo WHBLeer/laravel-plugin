@@ -28,7 +28,7 @@
         "ext-json": "*",
         "laravel/framework": "^11.0",
         "artesaos/seotools": "^v1.3",
-        "mcamara/laravel-localization": "^1.7",
+        "mcamara/laravel-localization": "^2.0",
         "illuminate/config": "^10.0 || ^11.0 || ^12.0",
         "illuminate/support": "^10.0 || ^11.0 || ^12.0"
     },
