@@ -4,8 +4,11 @@ namespace Sanlilin\LaravelPlugin\Console\Commands;
 
 use Exception;
 use App\Models\Menu;
+use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Input\InputArgument;
 use Sanlilin\LaravelPlugin\Support\Plugin;
 
@@ -25,6 +28,8 @@ class EnableCommand extends Command
 	 */
 	protected $description = 'Enable the specified plugin.';
 
+	protected static $source = 'plugin';
+
 	/**
 	 * Execute the console command.
 	 */
@@ -41,12 +46,19 @@ class EnableCommand extends Command
 
 		/** @var Plugin $plugin */
 		$plugin = $this->laravel['plugins.repository']->findOrFail($this->argument('plugin'));
+		self::$source = $plugin->config()['permission']['source_by'];
 		if ($plugin->isDisabled()) {
-			$plugin->enable();
 
+			// 执行迁移
+			Artisan::call('plugin:migrate', ['plugin' => $plugin->getName()]);
+
+			// 启用插件
+			$plugin->enable();
 			$this->info("Plugin [{$plugin}] enabled successful.");
-			if ($plugin->config()['menu']['status']) {
-				$this->insertMenu($plugin);
+
+			// 重新加载权限
+			if ($plugin->config()['permission']['status']) {
+				$this->reloadPermission($plugin);
 			}
 		} else {
 			$this->comment("Plugin [{$plugin}] has already enabled.");
@@ -72,7 +84,7 @@ class EnableCommand extends Command
 				$this->info("Plugin [{$plugin}]  enabled successful.");
 
 				if ($plugin->config()['menu']['status']) {
-					$this->insertMenu($plugin);
+					$this->reloadPermission($plugin);
 				}
 			} else {
 				$this->comment("Plugin [{$plugin}] has already enabled.");
@@ -81,38 +93,23 @@ class EnableCommand extends Command
 	}
 
 	/**
-	 * insert Menu
-	 * @param $plugin
-	 * @throws Exception
+	 * Reload menu
 	 *
-	 * @author: hongbinwang
-	 * @time  : 2023/11/2 14:31
+	 * @return void
+	 * @throws Exception
 	 */
-	public function insertMenu($plugin)
+	public function reloadPermission($plugin)
 	{
-		$menu_file = $plugin->getPath().'/'.$plugin->config()['menu']['file'];
-		$menu_data = json_decode(file_get_contents($menu_file),true);
-		$newNodes = self::createMenus($menu_data,$plugin->config());
-		$after_menu_hash = $plugin->config()['menu']['after_hash'];
-		if (!!$after_menu_hash) {
-			// Added to the specified root or level 1 node
-			$targetNode = Menu::withDepth()->where('hash',$after_menu_hash)->first();
-			if (!$targetNode->isRoot()) {
-				// Not root node
-				$targetNode = $targetNode->getRoot();
-			}
-		} else {
-			// Added after the last root node
-			$targetNode = Menu::withDepth()->having('depth', '=', 0)->orderBy('id','desc')->first();
-		}
-		foreach ($newNodes as $newNode) {
-			if (!$newNode->parent_id) {
-				$nodeId = $newNode->id;
-				// The `$newNode` moves behind the `$targetNode`
-				$newNode->insertAfterNode($targetNode);
-				$targetNode = Menu::find($nodeId);
-			}
-		}
+		Permission::where('source',self::$source)->delete();
+		// Repair tree structure
+		Permission::fixTree();
+
+		$permission_file = $plugin->getPath().'/'.$plugin->config()['permission']['file'];
+		$permission_data = json_decode(file_get_contents($permission_file),true);
+		$PermissionTo = self::generatePermissionData($permission_data);
+		self::givePermissionTo($PermissionTo);
+		// Repair tree structure
+		Permission::fixTree();
 	}
 
 	/**
@@ -132,105 +129,101 @@ class EnableCommand extends Command
 
 
 	/**
-	 * @param $data
-	 * @param $config
-	 * @return \mixed
-	 * @throws Exception
+	 * Process the menu recursively
+	 * @param $items
+	 * @param $parent
+	 * @param array $PermissionTo
 	 *
 	 * @author: hongbinwang
-	 * @time  : 2023/11/2 14:29
+	 * @time  : 2023/11/4 11:05
 	 */
-	private static function createMenus($data,$config)
+	private static function generatePermissionData($items, $parent = null, array $PermissionTo = [])
 	{
-		$id = Menu::max('id');
-		$sort_id = Menu::whereNull('parent_id')->min('sort_id');
-		$menus = [];
-		foreach ($data as $k1 => $v1) {
-			$id++;
-			$id1 = $id;
-			$menus[] = [
-				'id'         => $id1,
-				'parent_id'  => 0,
-				'url'        => self::GenerateUrl($v1['route_name']),
-				'route_name' => $v1['route_name'],
-				'icon'       => $v1['icon']??'icon-product',
-				'params'     => $v1['params']??null,
-				'name'       => $v1['name'],
-				'is_show'    => $v1['is_show'],
-				'is_menu'    => $v1['is_menu'],
-				'sort_id'    => $sort_id-($k1+1),
-				'source_by'  => $config['menu']['source_by'],
-				'hash'       => self::MenuHash($v1,$config['menu']['source_by']),
-			];
-			if (isset($v1['children'])) {
-				foreach ($v1['children'] as $k2 => $v2) {
-					$id++;
-					$id2 = $id;
-					$menus[] = [
-						'id'         => $id2,
-						'parent_id'  => $id1,
-						'url'        => self::GenerateUrl($v2['route_name']),
-						'route_name' => $v2['route_name'],
-						'icon'       => $v2['icon']??'icon-product',
-						'params'     => $v2['params']??null,
-						'name'       => $v2['name'],
-						'is_show'    => $v2['is_show'],
-						'is_menu'    => $v2['is_menu'],
-						'sort_id'    => 1000-$k2,
-						'source_by'  => $config['menu']['source_by'],
-						'hash'       => self::MenuHash($v2,$config['menu']['source_by']),
-					];
-					if (isset($v2['children'])) {
-						foreach ($v2['children'] as $k3 => $v3) {
-							$id++;
-							$id3 = $id;
-							$menus[] = [
-								'id'         => $id3,
-								'parent_id'  => $id2,
-								'url'        => self::GenerateUrl($v3['route_name']),
-								'route_name' => $v3['route_name'],
-								'icon'       => $v3['icon']??'icon-product',
-								'params'     => $v3['params']??null,
-								'name'       => $v3['name'],
-								'is_show'    => $v3['is_show'],
-								'is_menu'    => $v3['is_menu'],
-								'sort_id'    => 1000-$k3,
-								'source_by'  => $config['menu']['source_by'],
-								'hash'       => self::MenuHash($v3,$config['menu']['source_by']),
-							];
-						}
+		foreach ($items as $k => $item) {
+			/**
+			 * If the menu in the permission.json file of the plug-in is already in the system, it is not changed, updated, or overwritten
+			 */
+			if (!$permission = Permission::where('name',$item['name'])->first()) {
+				/**
+				 * "name": "plugins.local",
+				 * "guard_name": "admin",
+				 * "display_name": "本地安装",
+				 * "type": "button",
+				 * "is_menu": "no",
+				 * "icon": "ph-duotone  ph-squares-four",
+				 * "route": "admin.plugin.local"
+				 */
+				$permission = new Permission();
+				$permission->parent_id    = $parent ? $parent->id : null;
+				$permission->href         = self::GenerateUrl($item['route']??null);
+				$permission->name         = $item['name'];
+				$permission->guard_name   = $item['guard_name'] ?? 'admin';
+				$permission->display_name = $item['display_name'] ?? 'admin';
+				$permission->type         = $item['type']??'button';
+				$permission->is_menu      = $item['is_menu']??'no';
+				$permission->icon         = $item['icon'] ?? 'ph-duotone  ph-squares-four';
+				$permission->route        = $item['route'] ?? null;
+				$permission->sort_id      = $k+1;
+				$permission->source    = self::$source;
+				$permission->save();
+
+				if (!$parent) {
+					// All Level-1 nodes must be placed before 'system'
+					$targetNode = Permission::withDepth()->having('depth', '=', 0)->where('name', 'system')->first();
+					$permission->insertBeforeNode($targetNode);
+				} else {
+					// Placed by dependency
+					$targetNode = Permission::where('parent_id', $parent->id)->first();
+					if ($targetNode->name!='SYSTEM') {
+						$permission->appendToNode($targetNode);
+					} else {
+						$permission->prependToNode($targetNode);
 					}
 				}
 			}
+			$PermissionTo[] = $permission->name;
+			if (isset($item['children'])) {
+				self::generatePermissionData($item['children'], $permission, $PermissionTo);
+			}
 		}
-		DB::beginTransaction();
-		try {
-			DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-			DB::table('menus')->insert($menus);
-			DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-			DB::commit();
-			Menu::fixTree();
-			return Menu::where('source_by',$config['menu']['source_by'])->get();
-		} catch (Exception $exception) {
-			DB::rollback();
-			throw $exception;
-		}
+
+		return  $PermissionTo;
 	}
 
-	private static function MenuHash($data,$source_by): string
+	/**
+	 * @param $PermissionTo
+	 *
+	 * @author: hongbinwang
+	 * @time  : 2023/11/4 10:58
+	 */
+	private static function givePermissionTo($PermissionTo)
 	{
-		$data['source_by'] = $source_by;
-		if (isset($data['children'])) unset($data['children']);
-		if (isset($data['icon'])) unset($data['icon']);
+		// 确保管理员角色存在
+		$superAdmin = Role::firstOrCreate([
+			'name' => 'Super Admin',
+			'guard_name' => 'admin',
+		]);
+		$roleAdmin = Role::firstOrCreate([
+			'name' => 'Admin',
+			'guard_name' => 'admin',
+		]);
 
-		$str = implode('_',$data);
-		return hash('md5',$str);
+		// 分配权限
+		$superAdmin->givePermissionTo(Permission::all());
+		$roleAdmin->givePermissionTo($PermissionTo);
 	}
 
-	private static function GenerateUrl($route): string
+	/**
+	 * @param $route
+	 * @return string|null
+	 *
+	 * @author: hongbinwang
+	 * @time  : 2023/11/4 10:58
+	 */
+	private static function GenerateUrl($route=null): ?string
 	{
-		if (!$route) return 'javascript:void(0);';
-		return '/'.(str_replace('.','/',$route));
+		if (!$route) return null;
+		return str_replace(url('/'),'/',route($route));
 	}
 
 }

@@ -1,17 +1,17 @@
 function pluginActionHandler() {
 	return function () {
 		const $btn = $(this);
-		
+		const token = $('meta[name="csrf-token"]').attr('content');
 		$.ajaxSetup({
 			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				'X-CSRF-TOKEN': token
 			}
 		});
 		
 		$.ajax({
 			url: $btn.data('action'),
 			type: 'POST',
-			data: null,
+			data: {_token: token},
 			beforeSend: function () {
 				Loading();
 			},

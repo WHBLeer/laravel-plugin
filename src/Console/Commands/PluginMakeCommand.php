@@ -43,7 +43,7 @@ class PluginMakeCommand extends Command
                 ->setActivator($this->laravel[ActivatorInterface::class])
                 ->setConsole($this)
                 ->setForce($this->option('force'))
-                ->setActive(! $this->option('disabled'))
+                ->setActive(false)
                 ->generate();
 
             if ($code === E_ERROR) {
@@ -69,7 +69,6 @@ class PluginMakeCommand extends Command
     protected function getOptions(): array
     {
         return [
-            ['disabled', 'd', InputOption::VALUE_NONE, 'Do not enable the plugin at creation.'],
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when the plugin already exists.'],
         ];
     }

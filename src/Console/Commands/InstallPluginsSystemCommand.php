@@ -73,7 +73,7 @@ class InstallPluginsSystemCommand extends Command
 				 */
 				$permission = new Permission();
 				$permission->parent_id    = $parent ? $parent->id : null;
-				$permission->href         = self::GenerateUrl($item['route']);
+				$permission->href         = self::GenerateUrl($item['route']??null);
 				$permission->name         = $item['name'];
 				$permission->guard_name   = $item['guard_name'] ?? 'admin';
 				$permission->display_name = $item['display_name'] ?? 'admin';
@@ -98,8 +98,8 @@ class InstallPluginsSystemCommand extends Command
 						$permission->prependToNode($targetNode);
 					}
 				}
-				$PermissionTo[] = $permission->name;
 			}
+			$PermissionTo[] = $permission->name;
 			if (isset($item['children'])) {
 				self::generatePermissionData($item['children'], $permission, $PermissionTo);
 			}
@@ -138,7 +138,7 @@ class InstallPluginsSystemCommand extends Command
 	 * @author: hongbinwang
 	 * @time  : 2023/11/4 10:58
 	 */
-	private static function GenerateUrl($route): ?string
+	private static function GenerateUrl($route=null): ?string
 	{
 		if (!$route) return null;
 		return str_replace(url('/'),'/',route($route));

@@ -31,7 +31,7 @@ class InstallCommand extends Command
                 ->setFilesystem($this->laravel['files'])
                 ->setPluginRepository($this->laravel['plugins.repository'])
                 ->setActivator($this->laravel[ActivatorInterface::class])
-                ->setActive(! $this->option('disabled'))
+                ->setActive(false)
                 ->setConsole($this)
                 ->generate();
 
@@ -53,7 +53,6 @@ class InstallCommand extends Command
     protected function getOptions(): array
     {
         return [
-            ['disabled', 'd', InputOption::VALUE_NONE, 'Do not enable the plugin at creation.'],
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when the plugin already exists.'],
         ];
     }
