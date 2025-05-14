@@ -210,7 +210,7 @@ class RestartCommand extends Command
 	private static function GenerateUrl($route=null): ?string
 	{
 		if (!$route) return null;
-		return str_replace(url('/'),'/',route($route));
+		return str_replace(url('/'),'',route($route));
 	}
 
 }

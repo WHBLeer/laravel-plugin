@@ -14,7 +14,7 @@
 				"type": "button",
 				"is_menu": "no",
 				"icon": "ph-duotone  ph-squares-four",
-				"route": "admin.$LOWER_NAME$.index"
+				"route": "admin.$LOWER_NAME$"
 			},
 			{
 				"name": "$LOWER_NAME$.create",
