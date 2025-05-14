@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use $PLUGIN_NAMESPACE$\$PLUGIN$\$CONTROLLER_NAMESPACE$;
+use $PLUGIN_NAMESPACE$\$STUDLY_NAME$\$CONTROLLER_NAMESPACE$;
 
 /*
 |--------------------------------------------------------------------------

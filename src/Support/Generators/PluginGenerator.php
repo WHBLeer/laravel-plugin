@@ -478,4 +478,12 @@ class PluginGenerator implements GeneratorInterface
     {
         return str_replace('\\', '\\\\', GenerateConfigReader::read('provider')->getNamespace());
     }
+
+	/**
+	 * @return string
+	 */
+	protected function getControllerNameSpaceReplacement(): string
+	{
+		return str_replace('/', '\\', $this->pluginRepository->config('paths.generator.controller.namespace') ?: $this->pluginRepository->config('paths.generator.controller.path', 'Controller'));
+	}
 }

@@ -32,8 +32,8 @@ return [
 			'gitignore'       => '.gitignore',
 		],
 		'replacements' => [
-			'routes/web'      => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE'],
-			'routes/admin'    => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE'],
+			'routes/web'      => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'CONTROLLER_NAMESPACE'],
+			'routes/admin'    => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'CONTROLLER_NAMESPACE'],
 			'routes/api'      => ['LOWER_NAME'],
 			'json'            => ['LOWER_NAME', 'STUDLY_NAME', 'PLUGIN_NAMESPACE', 'PROVIDER_NAMESPACE'],
 			'permission'      => ['LOWER_NAME', 'STUDLY_NAME', 'UPPER_NAME'],
