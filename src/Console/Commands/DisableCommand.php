@@ -2,7 +2,7 @@
 
 namespace Sanlilin\LaravelPlugin\Console\Commands;
 
-use App\Models\Menu;
+use App\Models\Permission;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Sanlilin\LaravelPlugin\Support\Plugin;
@@ -23,6 +23,7 @@ class DisableCommand extends Command
 	 */
 	protected $description = 'Disable the specified plugin.';
 
+	protected static $source = 'plugin';
 	/**
 	 * Execute the console command.
 	 */
@@ -38,14 +39,12 @@ class DisableCommand extends Command
 
 		/** @var Plugin $plugin */
 		$plugin = $this->laravel['plugins.repository']->findOrFail($this->argument('plugin'));
-
+		self::$source = $plugin->config()['permission']['source_by'];
 		if ($plugin->isEnabled()) {
 			$plugin->disable();
 
 			$this->info("Plugin [{$plugin}] disabled successful.");
-			if ($plugin->config()['menu']['status']) {
-				$this->removeMenu($plugin);
-			}
+			$this->removePermission($plugin);
 		} else {
 			$this->comment("Plugin [{$plugin}] has already disabled.");
 		}
@@ -63,13 +62,12 @@ class DisableCommand extends Command
 		$plugins = $this->laravel['plugins.repository']->all();
 		/** @var Plugin $plugin */
 		foreach ($plugins as $plugin) {
+			self::$source = $plugin->config()['permission']['source_by'];
 			if ($plugin->isEnabled()) {
 				$plugin->disable();
 
 				$this->info("Plugin [{$plugin}] disabled successful.");
-				if ($plugin->config()['menu']['status']) {
-					$this->removeMenu($plugin);
-				}
+				$this->removePermission($plugin);
 			} else {
 				$this->comment("Plugin [{$plugin}] has already disabled.");
 			}
@@ -77,17 +75,17 @@ class DisableCommand extends Command
 	}
 
 	/**
-	 * remove Menu
+	 * remove Permission
 	 * @param $plugin
 	 *
 	 * @author: hongbinwang
 	 * @time  : 2023/11/2 14:32
 	 */
-	public function removeMenu($plugin)
+	public function removePermission($plugin)
 	{
-		Menu::where('source_by',$plugin->config()['menu']['source_by'])->delete();
+		Permission::where('source',self::$source)->delete();
 		// Repair tree structure
-		Menu::fixTree();
+		Permission::fixTree();
 	}
 
 	/**

@@ -8,7 +8,7 @@ use Sanlilin\LaravelPlugin\Support\Config\GenerateConfigReader;
 use Sanlilin\LaravelPlugin\Support\Stub;
 use Sanlilin\LaravelPlugin\Traits\PluginCommandTrait;
 
-class RouteProviderMakeCommand extends GeneratorCommand
+class MakeRouteProviderCommand extends GeneratorCommand
 {
     use PluginCommandTrait;
 

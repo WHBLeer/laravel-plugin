@@ -12,7 +12,7 @@ use Sanlilin\LaravelPlugin\Support\Migrations\SchemaParser;
 use Sanlilin\LaravelPlugin\Support\Stub;
 use Sanlilin\LaravelPlugin\Traits\PluginCommandTrait;
 
-class MigrationMakeCommand extends GeneratorCommand
+class MakeMigrationCommand extends GeneratorCommand
 {
     use PluginCommandTrait;
 
@@ -106,6 +106,7 @@ class MigrationMakeCommand extends GeneratorCommand
             'class' => $this->getClass(),
         ]);
     }
+
 
     /**
      * @return string

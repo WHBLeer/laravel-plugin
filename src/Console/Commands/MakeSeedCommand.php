@@ -10,7 +10,7 @@ use Sanlilin\LaravelPlugin\Support\Stub;
 use Sanlilin\LaravelPlugin\Traits\CanClearPluginsCache;
 use Sanlilin\LaravelPlugin\Traits\PluginCommandTrait;
 
-class SeedMakeCommand extends GeneratorCommand
+class MakeSeedCommand extends GeneratorCommand
 {
     use PluginCommandTrait;
     use CanClearPluginsCache;

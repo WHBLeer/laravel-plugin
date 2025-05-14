@@ -79,11 +79,12 @@ class EnableCommand extends Command
 		$plugins = $this->laravel['plugins.repository']->all();
 
 		foreach ($plugins as $plugin) {
+			self::$source = $plugin->config()['permission']['source_by'];
 			if ($plugin->isDisabled()) {
 				$plugin->enable();
 				$this->info("Plugin [{$plugin}]  enabled successful.");
 
-				if ($plugin->config()['menu']['status']) {
+				if ($plugin->config()['permission']['status']) {
 					$this->reloadPermission($plugin);
 				}
 			} else {

@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Sanlilin\LaravelPlugin\Contracts\ActivatorInterface;
 use Sanlilin\LaravelPlugin\Support\Generators\PluginGenerator;
 
-class PluginMakeCommand extends Command
+class MakePluginCommand extends Command
 {
     /**
      * The console command name.

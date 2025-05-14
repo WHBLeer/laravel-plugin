@@ -30,7 +30,8 @@
         "artesaos/seotools": "^1.3",
         "mcamara/laravel-localization": "^2.0",
         "illuminate/config": "^10.0 || ^11.0 || ^12.0",
-        "illuminate/support": "^10.0 || ^11.0 || ^12.0"
+        "illuminate/support": "^10.0 || ^11.0 || ^12.0",
+        "tinify/tinify": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0 || ^10.0 || ^11.5.3",

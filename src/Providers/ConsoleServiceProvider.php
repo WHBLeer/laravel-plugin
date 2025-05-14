@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Sanlilin\LaravelPlugin\Console\Commands\ComposerInstallCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\ComposerRemoveCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\ComposerRequireCommand;
-use Sanlilin\LaravelPlugin\Console\Commands\ControllerMakeCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\MakeControllerCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\DisableCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\DownLoadCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\EnableCommand;
@@ -15,17 +15,17 @@ use Sanlilin\LaravelPlugin\Console\Commands\InstallCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\ListCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\LoginCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\MigrateCommand;
-use Sanlilin\LaravelPlugin\Console\Commands\MigrationMakeCommand;
-use Sanlilin\LaravelPlugin\Console\Commands\ModelMakeCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\MakeMigrationCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\MakeModelCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\PluginCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\PluginDeleteCommand;
-use Sanlilin\LaravelPlugin\Console\Commands\PluginMakeCommand;
-use Sanlilin\LaravelPlugin\Console\Commands\ProviderMakeCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\MakePluginCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\MakeProviderCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\PublishCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\RestartCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\RegisterCommand;
-use Sanlilin\LaravelPlugin\Console\Commands\RouteProviderMakeCommand;
-use Sanlilin\LaravelPlugin\Console\Commands\SeedMakeCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\MakeRouteProviderCommand;
+use Sanlilin\LaravelPlugin\Console\Commands\MakeSeedCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\UploadCommand;
 use Sanlilin\LaravelPlugin\Console\Commands\InstallPluginsSystemCommand;
 
@@ -46,14 +46,14 @@ class ConsoleServiceProvider extends ServiceProvider
     protected array $commands = [
 	    InstallPluginsSystemCommand::class,
         PluginCommand::class,
-        PluginMakeCommand::class,
-        ProviderMakeCommand::class,
-        RouteProviderMakeCommand::class,
-        ControllerMakeCommand::class,
-        ModelMakeCommand::class,
-        MigrationMakeCommand::class,
+        MakePluginCommand::class,
+        MakeProviderCommand::class,
+        MakeRouteProviderCommand::class,
+        MakeControllerCommand::class,
+        MakeModelCommand::class,
+        MakeMigrationCommand::class,
         MigrateCommand::class,
-        SeedMakeCommand::class,
+        MakeSeedCommand::class,
         ComposerRequireCommand::class,
         ComposerRemoveCommand::class,
         ComposerInstallCommand::class,

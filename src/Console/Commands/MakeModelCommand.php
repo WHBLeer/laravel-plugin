@@ -9,7 +9,7 @@ use Sanlilin\LaravelPlugin\Support\Config\GenerateConfigReader;
 use Sanlilin\LaravelPlugin\Support\Stub;
 use Sanlilin\LaravelPlugin\Traits\PluginCommandTrait;
 
-class ModelMakeCommand extends GeneratorCommand
+class MakeModelCommand extends GeneratorCommand
 {
     use PluginCommandTrait;
 
