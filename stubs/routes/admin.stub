@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use $PLUGIN_NAMESPACE$\$STUDLY_NAME$\$CONTROLLER_NAMESPACE$;
+use $PLUGIN_NAMESPACE$\$STUDLY_NAME$\$CONTROLLER_NAMESPACE$\$STUDLY_NAME$Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +15,12 @@ use $PLUGIN_NAMESPACE$\$STUDLY_NAME$\$CONTROLLER_NAMESPACE$;
 
 Route::middleware(['auth:admin'])->group(function () {
 	Route::prefix('$LOWER_NAME$')->as('$LOWER_NAME$.')->group(function() {
-		Route::get('/', [$CONTROLLER_NAMESPACE$::class,'index']);
-		Route::get('/create', [$CONTROLLER_NAMESPACE$::class,'create'])->name('create');
-		Route::get('/edit', [$CONTROLLER_NAMESPACE$::class,'edit'])->name('edit');
-		Route::get('/show', [$CONTROLLER_NAMESPACE$::class,'show'])->name('show');
-		Route::post('/store', [$CONTROLLER_NAMESPACE$::class,'store'])->name('store');
-		Route::put('/update', [$CONTROLLER_NAMESPACE$::class,'update'])->name('update');
-		Route::post('/destroy', [$CONTROLLER_NAMESPACE$::class,'destroy'])->name('destroy');
+		Route::get('/', [$STUDLY_NAME$Controller::class,'index']);
+		Route::get('/create', [$STUDLY_NAME$Controller::class,'create'])->name('create');
+		Route::get('/edit', [$STUDLY_NAME$Controller::class,'edit'])->name('edit');
+		Route::get('/show', [$STUDLY_NAME$Controller::class,'show'])->name('show');
+		Route::post('/store', [$STUDLY_NAME$Controller::class,'store'])->name('store');
+		Route::put('/update', [$STUDLY_NAME$Controller::class,'update'])->name('update');
+		Route::post('/destroy', [$STUDLY_NAME$Controller::class,'destroy'])->name('destroy');
 	});
 });
