@@ -7,63 +7,38 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 
 class $CLASS$ extends ServiceProvider
 {
-    /**
-     * The plugin namespace to assume when generating URLs to actions.
-     *
-     * @var string
-     */
-    protected string $pluginNamespace = '$PLUGIN_NAMESPACE$\$PLUGIN$\$CONTROLLER_NAMESPACE$';
+	/**
+	 * Define your route model bindings, pattern filters, and other route configuration.
+	 */
+	public function boot(): void
+	{
+		$this->configureRateLimiting();
 
-    /**
-     * Called before routes are registered.
-     *
-     * Register any model bindings or pattern based filters.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
+		$this->routes(function () {
+			// API 路由
+			Route::middleware('api')
+				->prefix('api')
+				->group(plugin_path('$PLUGIN$', '/Routes/api.php'));
 
-    /**
-     * Define the routes for the application.
-     *
-     * @return void
-     */
-    public function map()
-    {
-        $this->mapApiRoutes();
+			// 前台客户路由
+			Route::middleware('web')
+				->group(plugin_path('$PLUGIN$', '/Routes/web.php'));
 
-        $this->mapWebRoutes();
-    }
+			// 后台管理路由
+			Route::middleware('web')
+				->prefix('admin')
+				->as('admin.')
+				->group(plugin_path('$PLUGIN$', '/Routes/admin.php'));
+		});
+	}
 
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
-     */
-    protected function mapWebRoutes()
-    {
-        Route::middleware('web')
-            ->namespace($this->pluginNamespace)
-            ->group(plugin_path('$PLUGIN$', '$WEB_ROUTES_PATH$'));
-    }
-
-    /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
-     */
-    protected function mapApiRoutes()
-    {
-        Route::prefix('api')
-            ->middleware('api')
-            ->namespace($this->pluginNamespace)
-            ->group(plugin_path('$PLUGIN$', '$API_ROUTES_PATH$'));
-    }
+	/**
+	 * 配置请求速率限制
+	 */
+	protected function configureRateLimiting(): void
+	{
+		RateLimiter::for('api', function (Request $request) {
+			return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+		});
+	}
 }

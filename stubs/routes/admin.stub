@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use $PLUGIN_NAMESPACE$\$PLUGIN$\$CONTROLLER_NAMESPACE$;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth:admin'])->group(function () {
-	Route::prefix('$LOWER_NAME$')->group(function() {
-		Route::get('/', '$STUDLY_NAME$Controller@index');
+	Route::prefix('$LOWER_NAME$')->as('$LOWER_NAME$.')->group(function() {
+		Route::get('/', [$CONTROLLER_NAMESPACE$::class,'index']);
+		Route::get('/create', [$CONTROLLER_NAMESPACE$::class,'create'])->name('create');
+		Route::get('/edit', [$CONTROLLER_NAMESPACE$::class,'edit'])->name('edit');
+		Route::get('/show', [$CONTROLLER_NAMESPACE$::class,'show'])->name('show');
+		Route::post('/store', [$CONTROLLER_NAMESPACE$::class,'store'])->name('store');
+		Route::put('/update', [$CONTROLLER_NAMESPACE$::class,'update'])->name('update');
+		Route::post('/destroy', [$CONTROLLER_NAMESPACE$::class,'destroy'])->name('destroy');
 	});
 });

@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use $PLUGIN_NAMESPACE$\$PLUGIN$\$CONTROLLER_NAMESPACE$;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('$LOWER_NAME$')->group(function() {
-    Route::get('/', '$STUDLY_NAME$Controller@index');
+Route::prefix('$LOWER_NAME$')->as('$LOWER_NAME$.')->group(function() {
+	Route::get('/', [$CONTROLLER_NAMESPACE$::class,'index']);
 });

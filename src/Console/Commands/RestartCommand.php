@@ -150,7 +150,7 @@ class RestartCommand extends Command
 				$permission->is_menu      = $item['is_menu']??'no';
 				$permission->icon         = $item['icon'] ?? 'ph-duotone  ph-squares-four';
 				$permission->route        = $item['route'] ?? null;
-				$permission->sort_id      = $k+1;
+				$permission->sort         = $k+1;
 				$permission->source    = self::$source;
 				$permission->save();
 
